@@ -3,15 +3,15 @@
 ═══════════════════════════════════════════ */
 
 :root {
-  --pool-deep:   #0A2540;   /* deep navy */
-  --pool-mid:    #1565C0;   /* primary blue */
-  --pool-bright: #1E88E5;   /* accent */
-  --wave:        #29B6F6;   /* highlight / badge */
-  --foam:        #E3F2FD;   /* page bg tint */
+  --pool-deep:   #0F172A;   /* deep slate graphite */
+  --pool-mid:    #334155;   /* dark slate gray */
+  --pool-bright: #475569;   /* slate accent */
+  --wave:        #64748B;   /* soft grayish blue */
+  --foam:        #F8FAFC;   /* ultra-clean page bg tint */
   --white:       #FFFFFF;
-  --text-main:   #1A1A2E;
-  --text-muted:  #607D8B;
-  --border:      #CFE2FF;
+  --text-main:   #0F172A;   /* slate-900 */
+  --text-muted:  #64748B;   /* slate-500 */
+  --border:      #E2E8F0;   /* slate-200 */
   --sidebar-w:   260px;
   --radius:      12px;
 }
