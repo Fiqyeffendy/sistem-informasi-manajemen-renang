@@ -1,0 +1,44 @@
+# REST Client tests for Laravel backend
+
+### GET all siswa
+GET http://127.0.0.1:8000/api/siswa
+Accept: application/json
+
+###
+
+### POST create siswa
+POST http://127.0.0.1:8000/api/siswa
+Content-Type: application/json
+
+{
+  "nama": "Budi",
+  "umur": 15,
+  "no_hp_ortu": "082112345678",
+  "paket": "Silver"
+}
+
+###
+
+### GET siswa by id
+GET http://127.0.0.1:8000/api/siswa/1
+Accept: application/json
+
+###
+
+### PUT update siswa by id
+PUT http://127.0.0.1:8000/api/siswa/1
+Content-Type: application/json
+
+{
+  "nama": "Budi Updated",
+  "umur": 16,
+  "no_hp_ortu": "082199988776",
+  "paket": "Gold"
+}
+
+###
+
+### DELETE siswa by id
+DELETE http://127.0.0.1:8000/api/siswa/1
+Accept: application/json
+

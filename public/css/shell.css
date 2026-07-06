@@ -1,0 +1,133 @@
+/* ═══════════════════════════════════
+   App Shell – Sidebar & Topbar
+═══════════════════════════════════ */
+
+/* ── App Shell wrapper ── */
+#app-shell { display: none; }
+#app-shell.active { display: flex; min-height: 100vh; }
+
+/* ── Sidebar ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--pool-deep);
+  display: flex; flex-direction: column;
+  position: fixed; top: 0; left: 0; bottom: 0;
+  z-index: 200;
+  transition: transform .3s;
+}
+
+.sidebar-brand {
+  padding: 1.4rem 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.sidebar-brand .brand-logo {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--pool-bright), var(--wave));
+  border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.sidebar-brand .brand-logo i { color: #fff; font-size: 1.1rem; }
+.sidebar-brand span {
+  font-weight: 800; font-size: 1rem; color: #fff;
+  vertical-align: middle; margin-left: .6rem; letter-spacing: .3px;
+}
+.sidebar-brand small {
+  display: block; color: rgba(255,255,255,.45);
+  font-size: .72rem; margin-left: 48px; margin-top: -4px;
+}
+
+.sidebar-nav { padding: .75rem 0; flex: 1; overflow-y: auto; }
+
+.nav-section-label {
+  font-size: .68rem; font-weight: 700; letter-spacing: 1px;
+  color: rgba(255,255,255,.3); text-transform: uppercase;
+  padding: .9rem 1.25rem .3rem;
+}
+
+.sidebar-nav .nav-link {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .6rem 1.25rem; color: rgba(255,255,255,.65);
+  text-decoration: none; border-radius: 0; font-size: .88rem;
+  transition: background .15s, color .15s;
+  position: relative;
+}
+.sidebar-nav .nav-link i { font-size: 1rem; width: 20px; text-align: center; }
+.sidebar-nav .nav-link:hover,
+.sidebar-nav .nav-link.active {
+  background: rgba(255,255,255,.08); color: #fff;
+}
+.sidebar-nav .nav-link.active::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--wave); border-radius: 0 2px 2px 0;
+}
+
+.sidebar-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.user-chip { display: flex; align-items: center; gap: .75rem; }
+.user-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--pool-bright), var(--wave));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: #fff; font-size: .85rem; flex-shrink: 0;
+}
+.user-chip .info small { display: block; color: rgba(255,255,255,.4); font-size: .7rem; }
+.user-chip .info span  { color: #fff; font-size: .82rem; font-weight: 600; }
+
+.btn-logout {
+  background: transparent; border: none; color: rgba(255,255,255,.45);
+  font-size: 1rem; padding: 0; cursor: pointer; transition: color .15s;
+}
+.btn-logout:hover { color: #ff6b6b; }
+
+/* ── Main content area ── */
+.main-content {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex; flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Topbar ── */
+.topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: .85rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+.topbar h5 { margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--pool-deep); }
+.topbar .right { display: flex; align-items: center; gap: 1rem; }
+.topbar .badge-date {
+  background: var(--foam); color: var(--pool-mid);
+  border: 1px solid var(--border); border-radius: 20px;
+  padding: .3rem .75rem; font-size: .78rem; font-weight: 600;
+}
+
+.btn-hamburger {
+  display: none; background: none; border: none;
+  font-size: 1.4rem; color: var(--pool-deep); cursor: pointer;
+}
+
+/* ── Page body ── */
+.page-body { padding: 1.5rem; flex: 1; }
+
+/* ── Responsive (mobile) ── */
+@media (max-width: 991px) {
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: 4px 0 24px rgba(0,0,0,.25);
+  }
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.4); z-index: 199;
+  }
+  .sidebar-overlay.open { display: block; }
+
+  .main-content { margin-left: 0; }
+  .btn-hamburger { display: block; }
+}

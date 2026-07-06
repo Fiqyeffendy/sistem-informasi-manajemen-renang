@@ -1,0 +1,38 @@
+/* ═══════════════════════════════════════════
+   SIMPEL-Fella — Design Tokens & Base Styles
+═══════════════════════════════════════════ */
+
+:root {
+  --pool-deep:   #0A2540;   /* deep navy */
+  --pool-mid:    #1565C0;   /* primary blue */
+  --pool-bright: #1E88E5;   /* accent */
+  --wave:        #29B6F6;   /* highlight / badge */
+  --foam:        #E3F2FD;   /* page bg tint */
+  --white:       #FFFFFF;
+  --text-main:   #1A1A2E;
+  --text-muted:  #607D8B;
+  --border:      #CFE2FF;
+  --sidebar-w:   260px;
+  --radius:      12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--foam);
+  color: var(--text-main);
+  margin: 0;
+}
+
+/* Utility */
+.fw-600 { font-weight: 600; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeInUp .35s ease both; }
+
+.page { display: none; }
+.page.active { display: block; }
