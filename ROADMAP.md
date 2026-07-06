@@ -1,8 +1,8 @@
 # 🗺️ ROADMAP PROYEK SIMPEL-FELLA
 ## Sistem Informasi Manajemen Pelatihan Les Renang Fella
 
-> **Terakhir diperbarui:** 6 Juli 2026
-> **Status Proyek:** Fase Pengembangan Aktif (±50% Web Admin selesai)
+> **Terakhir diperbarui:** 7 Juli 2026
+> **Status Proyek:** Fase Pengembangan Aktif (±65% Web Admin selesai — Fase 1 hampir tuntas)
 
 ---
 
@@ -72,57 +72,64 @@
 ### ✅ Yang Sudah Selesai
 
 #### Database & Model
-| Komponen    | Migrasi | Model | Seeder |
-| :---------- | :-----: | :---: | :----: |
-| Users       |   ✅    |  ✅   |   ✅   |
-| Siswa       |   ✅    |  ✅   |   ✅   |
-| Pelatih     |   ✅    |  ✅   |   ✅   |
-| Jadwal      |   ✅    |  ✅   |   ✅   |
-| Presensi    |   ✅    |  ✅   |   ✅   |
-| Pendaftaran |   ✅    |  ✅   |   ✅   |
+| Komponen    | Migrasi | Model | Seeder | Catatan |
+| :---------- | :-----: | :---: | :----: | :------ |
+| Users       |   ✅    |  ✅   |   ✅   | Kolom `pelatih_id` & `siswa_id` (string FK) ditambahkan |
+| Siswa       |   ✅    |  ✅   |   ✅   | Custom ID format `S001`, `S002`, … (string PK, auto-generate) |
+| Pelatih     |   ✅    |  ✅   |   ✅   | Custom ID format `P001`, `P002`, … (string PK, auto-generate) |
+| Jadwal      |   ✅    |  ✅   |   ✅   | FK `siswa_id` & `pelatih_id` diubah ke string |
+| Presensi    |   ✅    |  ✅   |   ✅   | FK `siswa_id` & `pelatih_id` diubah ke string |
+| Pendaftaran |   ✅    |  ✅   |   ✅   | Kolom `program`, `jenis_program`, `lokasi_les` aktif |
+
+#### PHP Enums (Standarisasi Nilai)
+| Enum           | Status | Nilai                                                |
+| :------------- | :----: | :--------------------------------------------------- |
+| `Program`      |   ✅   | WaterBabies, SwimStars, AquaKids, FellaSwimmer, dll. |
+| `JenisProgram` |   ✅   | `Private`, `Small Group`, `Group`                    |
+| `LokasiLes`    |   ✅   | Istana Mentari, Hotel Aston, Sekolah Cikal, dll.     |
 
 #### RESTful API (CRUD via Controller)
-| Endpoint           | Index | Store | Show | Update | Destroy |
-| :----------------- | :---: | :---: | :--: | :----: | :-----: |
-| `api/siswa`        |  ✅   |  ✅   |  ✅  |   ✅   |   ✅    |
-| `api/pelatih`      |  ✅   |  ✅   |  ✅  |   ✅   |   ✅    |
-| `api/jadwal`       |  ✅   |  ✅   |  ✅  |   ✅   |   ✅    |
-| `api/pendaftaran`  |  ✅   |  ✅   |  ✅  |   ✅   |   ✅    |
-| `api/presensi`     |  ❌   |  ❌   |  ❌  |   ❌   |   ❌    |
+| Endpoint           | Index | Store | Show | Update | Destroy | Catatan |
+| :----------------- | :---: | :---: | :--: | :----: | :-----: | :------ |
+| `api/siswa`        |  ✅   |  ✅   |  ✅  |   ✅   |   ✅    | Auto-generate ID `S001` |
+| `api/pelatih`      |  ✅   |  ✅   |  ✅  |   ✅   |   ✅    | Auto-generate ID `P001` |
+| `api/jadwal`       |  ✅   |  ✅   |  ✅  |   ✅   |   ✅    | Relasi `siswa` & `pelatih` di-load |
+| `api/pendaftaran`  |  ✅   |  ✅   |  ✅  |   ✅   |   ✅    | Accept → buat siswa otomatis |
+| `api/presensi`     |  ❌   |  ❌   |  ❌  |   ❌   |   ❌    | **Belum ada controller** |
 
 #### Halaman Web (Views Blade)
-| Halaman               | File Ada | Data Dinamis (API) | UI Lengkap |
-| :-------------------- | :------: | :----------------: | :--------: |
-| **Admin Dashboard**   |    ✅    |        🔶          |     🔶     |
-| **Admin Siswa**       |    ✅    |        ✅          |     ✅     |
-| **Admin Pelatih**     |    ✅    |        ✅          |     ✅     |
-| **Admin Jadwal**      |    ✅    |        ✅          |     ✅     |
-| **Admin Pendaftaran** |    ✅    |        ✅          |     ✅     |
-| **Admin Presensi**    |    ✅    |        🔶          |     🔶     |
-| **Admin Sesi**        |    ✅    |        ❌          |     🔶     |
-| **Admin Laporan**     |    ✅    |        ❌          |     🔶     |
-| **Login**             |    ✅    |        🔶          |     ✅     |
-| **Register**          |    ✅    |        🔶          |     ✅     |
-| **Pelatih Dashboard** |    ✅    |        ❌          |     🔶     |
-| **Pelatih Jadwal**    |    ✅    |        ❌          |     🔶     |
-| **Pelatih Presensi**  |    ✅    |        ❌          |     🔶     |
-| **Pelatih Siswa**     |    ✅    |        ❌          |     🔶     |
-| **Siswa Dashboard**   |    ✅    |        ❌          |     🔶     |
-| **Siswa Jadwal**      |    ✅    |        ❌          |     🔶     |
-| **Siswa Presensi**    |    ✅    |        ❌          |     🔶     |
-| **Siswa Sesi**        |    ✅    |        ❌          |     🔶     |
+| Halaman               | File Ada | Data Dinamis (API) | UI Lengkap | Catatan |
+| :-------------------- | :------: | :----------------: | :--------: | :------ |
+| **Admin Dashboard**   |    ✅    |        🔶          |     ✅     | UI redesign selesai, data statistik masih sebagian statis |
+| **Admin Siswa**       |    ✅    |        ✅          |     ✅     | Full CRUD, avatar inisial, search & filter |
+| **Admin Pelatih**     |    ✅    |        ✅          |     ✅     | Full CRUD + UI premium, ID format P001 |
+| **Admin Jadwal**      |    ✅    |        ✅          |     ✅     | Full CRUD, relasi siswa-pelatih sinkron |
+| **Admin Pendaftaran** |    ✅    |        ✅          |     ✅     | Kolom Program, Jenis Program, Lokasi Les |
+| **Admin Presensi**    |    ✅    |        ❌          |     🔶     | UI ada, data masih demo/statis |
+| **Admin Sesi**        |    ✅    |        ❌          |     🔶     | UI ada, data masih statis |
+| **Admin Laporan**     |    ✅    |        ❌          |     🔶     | UI ada, data masih statis |
+| **Login**             |    ✅    |        🔶          |     ✅     | UI premium, auth masih localStorage |
+| **Register**          |    ✅    |        🔶          |     ✅     | Wizard multi-step + validasi client |
+| **Pelatih Dashboard** |    ✅    |        ❌          |     🔶     | Layout ada, belum terhubung API |
+| **Pelatih Jadwal**    |    ✅    |        ❌          |     🔶     | Layout ada, belum terhubung API |
+| **Pelatih Presensi**  |    ✅    |        🔶          |     🔶     | Ada form demo, belum ke API nyata |
+| **Pelatih Siswa**     |    ✅    |        ❌          |     🔶     | Layout ada, belum terhubung API |
+| **Siswa Dashboard**   |    ✅    |        ❌          |     🔶     | Layout ada, belum terhubung API |
+| **Siswa Jadwal**      |    ✅    |        ❌          |     🔶     | Layout ada, belum terhubung API |
+| **Siswa Presensi**    |    ✅    |        ❌          |     🔶     | Layout ada, belum terhubung API |
+| **Siswa Sesi**        |    ✅    |        ❌          |     🔶     | Layout ada, belum terhubung API |
 
 > ✅ = Selesai &nbsp; 🔶 = Setengah / Sebagian &nbsp; ❌ = Belum Dibuat
 
 #### Sistem Lainnya
-| Komponen                  | Status |
-| :------------------------ | :----: |
-| Autentikasi Backend Nyata |   ❌   |
-| Middleware Role-based     |   ❌   |
-| Token Auth (Sanctum)      |   ❌   |
-| PWA (manifest + SW)       |   ❌   |
-| Unit / Feature Test       |   🔶   |
-| Deployment Production     |   ❌   |
+| Komponen                  | Status | Catatan |
+| :------------------------ | :----: | :------ |
+| Autentikasi Backend Nyata |   ❌   | Masih pakai localStorage role |
+| Middleware Role-based     |   ❌   | Belum dibuat |
+| Token Auth (Sanctum)      |   ❌   | Package terpasang, belum dikonfigurasi |
+| PWA (manifest + SW)       |   ❌   | Belum ada |
+| Unit / Feature Test       |   🔶   | File test ada, belum ditulis |
+| Deployment Production     |   ❌   | Belum |
 
 ---
 
@@ -132,8 +139,9 @@
 
 ### 🔵 FASE 1: Penyempurnaan Backend & API (Prioritas Utama)
 > **Target:** Semua endpoint API berfungsi dengan validasi yang kokoh.
+> **Progress: ~80% Selesai** ✅
 
-#### 1.1 API Presensi (CRUD)
+#### 1.1 API Presensi (CRUD) ❌ BELUM
 - [ ] Buat `PresensiController.php` di folder `app/Http/Controllers/Api/`
 - [ ] Daftarkan route: `Route::apiResource('presensi', PresensiController::class)` di `api.php`
 - [ ] Endpoint: `GET /api/presensi` — Ambil semua data presensi (dengan relasi siswa, pelatih, jadwal)
@@ -142,37 +150,53 @@
 - [ ] Endpoint: `DELETE /api/presensi/{id}` — Hapus data presensi
 - [ ] Validasi: siswa_id, jadwal_id, tanggal, status (hadir/izin/sakit/alpha)
 
-#### 1.2 Logika Sesi Latihan
+#### 1.2 Logika Sesi Latihan ❌ BELUM
 - [ ] Pastikan field `total_sesi` dan `sesi_terpakai` di tabel siswa terupdate otomatis ketika presensi dengan status "hadir" dibuat
 - [ ] Buat endpoint atau logika untuk menghitung sisa sesi: `sisa_sesi = total_sesi - sesi_terpakai`
 - [ ] Tambahkan peringatan otomatis jika sisa sesi siswa tinggal ≤ 2
 
-#### 1.3 Logika Laporan
+#### 1.3 Logika Laporan ❌ BELUM
 - [ ] Buat endpoint `GET /api/laporan/ringkasan` — Mengembalikan statistik: total siswa aktif, total sesi minggu ini, persentase kehadiran, dll.
 - [ ] Buat endpoint `GET /api/laporan/presensi?bulan=7&tahun=2026` — Rekap presensi per bulan
+
+#### 1.4 ✅ Yang Sudah Selesai (Ditambahkan Juli 2026)
+- [x] ~~Migrasi semua ID Siswa ke format string `S001` (custom string PK)~~ ✅
+- [x] ~~Migrasi semua ID Pelatih ke format string `P001` (custom string PK)~~ ✅
+- [x] ~~Update FK `siswa_id` & `pelatih_id` di tabel `jadwal`, `presensi`, `users` menjadi string~~ ✅
+- [x] ~~Fix Eloquent Model Casts `siswa_id` & `pelatih_id` ke `'string'` di model `Jadwal`, `Presensi`, `Pendaftaran`~~ ✅
+- [x] ~~Perbaikan payload JS jadwal (hapus `Number()` casting yang merusak string ID)~~ ✅
+- [x] ~~Tambah Enums PHP: `Program`, `JenisProgram`, `LokasiLes` untuk standarisasi nilai~~ ✅
+- [x] ~~Logika `acceptPendaftaran` — otomatis buat data Siswa dari data Pendaftaran~~ ✅
 
 ---
 
 ### 🟢 FASE 2: Penyelesaian Halaman Web Admin
 > **Target:** Semua halaman admin sudah terhubung ke API dan menampilkan data dinamis.
+> **Progress: ~60% Selesai** 🔶
 
-#### 2.1 Halaman Presensi Admin
-- [ ] Hubungkan `admin/presensi.blade.php` dengan `GET /api/presensi`
+#### 2.1 ✅ Halaman yang Sudah Selesai
+- [x] ~~Admin Siswa — Full CRUD, search, avatar inisial, badge program~~ ✅
+- [x] ~~Admin Pelatih — Full CRUD, ID P001, status cuti, badge spesialisasi~~ ✅
+- [x] ~~Admin Jadwal — Full CRUD, relasi siswa-pelatih, filter hari~~ ✅
+- [x] ~~Admin Pendaftaran — Kolom Program, Jenis Program, Lokasi Les, tombol Accept~~ ✅
+
+#### 2.2 Halaman Presensi Admin 🔶 PERLU DISELESAIKAN
+- [ ] Hubungkan `admin/presensi.blade.php` dengan `GET /api/presensi` (tunggu 1.1 selesai)
 - [ ] Tambahkan form/modal untuk input presensi baru (pilih siswa, jadwal, tanggal, status kehadiran)
 - [ ] Tambahkan filter berdasarkan tanggal, siswa, atau pelatih
 - [ ] Buat fungsi CRUD presensi di `main.js` (seperti yang sudah dilakukan untuk siswa, pelatih, jadwal)
 
-#### 2.2 Halaman Sesi Admin
+#### 2.3 Halaman Sesi Admin 🔶 PERLU DISELESAIKAN
 - [ ] Hubungkan `admin/sesi.blade.php` dengan API siswa (untuk menampilkan sisa sesi masing-masing siswa)
 - [ ] Ganti data statis/hardcoded menjadi data dinamis dari API
 - [ ] Tampilkan progress bar sesi berdasarkan data aktual `sesi_terpakai / total_sesi`
 
-#### 2.3 Halaman Laporan Admin
-- [ ] Hubungkan `admin/laporan.blade.php` dengan endpoint laporan
+#### 2.4 Halaman Laporan Admin 🔶 PERLU DISELESAIKAN
+- [ ] Hubungkan `admin/laporan.blade.php` dengan endpoint laporan (tunggu 1.3 selesai)
 - [ ] Tampilkan statistik ringkasan (total siswa, kehadiran minggu ini, dll.)
 - [ ] Tampilkan rekap presensi dalam format tabel atau grafik sederhana
 
-#### 2.4 Dashboard Admin
+#### 2.5 Dashboard Admin 🔶 PERLU DISELESAIKAN
 - [ ] Pastikan semua angka statistik di dashboard (total siswa, pelatih aktif, jadwal hari ini) diambil dari API secara dinamis
 - [ ] Pastikan notifikasi/peringatan sisa sesi muncul di dashboard
 
@@ -180,6 +204,7 @@
 
 ### 🟡 FASE 3: Sistem Autentikasi & Keamanan
 > **Target:** Login yang aman menggunakan database, bukan hanya `localStorage`.
+> **Progress: ❌ Belum Dimulai**
 
 #### 3.1 Autentikasi Backend Nyata
 - [ ] Instal dan konfigurasi **Laravel Sanctum** untuk Token-based Authentication
@@ -205,6 +230,7 @@
 
 ### 🟠 FASE 4: Halaman Pelatih & Siswa (Persiapan PWA)
 > **Target:** Halaman khusus pelatih dan siswa sudah berfungsi, responsif, dan terhubung API.
+> **Progress: ❌ Belum Dimulai (layout ada, belum terhubung API)**
 
 #### 4.1 Halaman Pelatih
 - [ ] **Dashboard Pelatih:** Tampilkan jadwal melatih hari ini (dari `GET /api/jadwal` difilter berdasarkan pelatih yang login)
@@ -266,6 +292,7 @@
 
 ### 🟣 FASE 6: Testing, Dokumentasi & Deployment
 > **Target:** Proyek siap dipresentasikan dan di-deploy ke server production.
+> **Progress: ❌ Belum Dimulai**
 
 #### 6.1 Testing
 - [ ] Tulis **Feature Test** untuk setiap endpoint API (CRUD siswa, pelatih, jadwal, presensi)
@@ -291,15 +318,15 @@
 
 ## 📅 Estimasi Waktu Pengerjaan
 
-| Fase | Deskripsi                              | Estimasi     |
-| :--- | :------------------------------------- | :----------- |
-| 1    | Penyempurnaan Backend & API            | 2 – 3 hari   |
-| 2    | Penyelesaian Halaman Web Admin         | 3 – 4 hari   |
-| 3    | Sistem Autentikasi & Keamanan          | 2 – 3 hari   |
-| 4    | Halaman Pelatih & Siswa (Responsif)    | 3 – 4 hari   |
-| 5    | Implementasi PWA                       | 1 – 2 hari   |
-| 6    | Testing, Dokumentasi & Deployment      | 2 – 3 hari   |
-|      | **TOTAL ESTIMASI**                     | **13 – 19 hari** |
+| Fase | Deskripsi                              | Estimasi         | Progress   |
+| :--- | :------------------------------------- | :--------------- | :--------- |
+| 1    | Penyempurnaan Backend & API            | 2 – 3 hari   | ~80% ✅     |
+| 2    | Penyelesaian Halaman Web Admin         | 3 – 4 hari   | ~60% 🔶    |
+| 3    | Sistem Autentikasi & Keamanan          | 2 – 3 hari   | 0% ❌       |
+| 4    | Halaman Pelatih & Siswa (Responsif)    | 3 – 4 hari   | 0% ❌       |
+| 5    | Implementasi PWA                       | 1 – 2 hari   | 0% ❌       |
+| 6    | Testing, Dokumentasi & Deployment      | 2 – 3 hari   | 0% ❌       |
+|      | **TOTAL ESTIMASI**                     | **13 – 19 hari** | |
 
 > **Catatan:** Estimasi waktu di atas mengasumsikan Anda bekerja full-time (6-8 jam/hari) dengan bantuan AI coding assistant. Waktu bisa lebih singkat atau lebih panjang tergantung kompleksitas fitur dan revisi dari dosen.
 
@@ -308,12 +335,12 @@
 ## 🎯 Urutan Prioritas (Apa yang Harus Dikerjakan Duluan?)
 
 ```
-1. FASE 1 ──► Backend & API HARUS SELESAI DULUAN (fondasi)
-2. FASE 2 ──► Web Admin berfungsi penuh (bukti CRUD + RESTful API)
-3. FASE 3 ──► Autentikasi aman (syarat keamanan dari dosen)
-4. FASE 4 ──► Halaman Pelatih & Siswa responsif (persiapan mobile)
-5. FASE 5 ──► PWA (bukti "web antar aplikasi" untuk dosen)
-6. FASE 6 ──► Testing & Deploy (siap presentasi)
+1. FASE 1 (sisa) ► Buat PresensiController + endpoint laporan (fondasi data)
+2. FASE 2 (sisa) ► Hubungkan Presensi, Sesi, Laporan, Dashboard ke API nyata
+3. FASE 3 ► Autentikasi aman (syarat keamanan dari dosen)
+4. FASE 4 ► Halaman Pelatih & Siswa responsif (persiapan mobile)
+5. FASE 5 ► PWA (bukti "web antar aplikasi" untuk dosen)
+6. FASE 6 ► Testing & Deploy (siap presentasi)
 ```
 
 > ⚠️ **PENTING:** Jangan lompat ke fase selanjutnya sebelum fase sebelumnya benar-benar tuntas. Backend yang rapih adalah kunci keberhasilan seluruh sistem.

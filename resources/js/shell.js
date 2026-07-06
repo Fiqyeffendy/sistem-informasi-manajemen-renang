@@ -80,7 +80,9 @@
 
   function setTopbarDate() {
     const opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-    const dateEl = document.getElementById('topbar-date');
+    // Support both id and class name used in app.blade
+    const dateEl = document.getElementById('topbar-date')
+               || document.querySelector('.topbar-badge-date');
     if (dateEl) {
       dateEl.textContent = new Date().toLocaleDateString('id-ID', opts);
     }

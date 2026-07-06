@@ -36,7 +36,7 @@ class Pendaftaran extends Model
         'tanggal_lahir'  => 'date',
         'tanggal_daftar' => 'datetime',
         'verified_at'    => 'datetime',
-        'siswa_id'       => 'integer',
+        'siswa_id'       => 'string',
     ];
 
     public function siswa(): BelongsTo

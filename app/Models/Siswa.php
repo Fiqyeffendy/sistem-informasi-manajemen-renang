@@ -13,6 +13,9 @@ class Siswa extends Model
 {
     protected $table = 'siswa';
 
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $fillable = [
         'nama',
         'umur',
@@ -24,6 +27,23 @@ class Siswa extends Model
         'sesi_terpakai',
         'status',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($siswa) {
+            if (empty($siswa->id)) {
+                // Get the last record sorted by parsing the numeric part of the ID string
+                $lastSiswa = Siswa::orderByRaw("CAST(SUBSTRING(id, 2) AS INTEGER) DESC")->first();
+                if ($lastSiswa) {
+                    $lastNum = (int) substr($lastSiswa->id, 1);
+                    $nextNum = $lastNum + 1;
+                } else {
+                    $nextNum = 1;
+                }
+                $siswa->id = 'S' . str_pad($nextNum, 3, '0', STR_PAD_LEFT);
+            }
+        });
+    }
 
     protected $casts = [
         'umur'          => 'integer',

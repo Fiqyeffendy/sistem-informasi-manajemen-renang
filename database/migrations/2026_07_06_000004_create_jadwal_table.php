@@ -10,8 +10,10 @@ return new class extends Migration
     {
         Schema::create('jadwal', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
-            $table->foreignId('pelatih_id')->constrained('pelatih')->cascadeOnDelete();
+            $table->string('siswa_id', 50);
+            $table->foreign('siswa_id')->references('id')->on('siswa')->cascadeOnDelete();
+            $table->string('pelatih_id', 50);
+            $table->foreign('pelatih_id')->references('id')->on('pelatih')->cascadeOnDelete();
             $table->enum('hari', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']);
             $table->time('jam');
             $table->string('lokasi');

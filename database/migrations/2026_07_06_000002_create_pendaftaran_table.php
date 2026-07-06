@@ -29,7 +29,8 @@ return new class extends Migration
             $table->timestamp('tanggal_daftar')->nullable();
             $table->string('verified_by')->nullable();
             $table->timestamp('verified_at')->nullable();
-            $table->foreignId('siswa_id')->nullable()->constrained('siswa')->nullOnDelete();
+            $table->string('siswa_id', 50)->nullable();
+            $table->foreign('siswa_id')->references('id')->on('siswa')->nullOnDelete();
             $table->timestamps();
         });
     }

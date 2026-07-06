@@ -22,8 +22,8 @@ class Jadwal extends Model
     ];
 
     protected $casts = [
-        'siswa_id'   => 'integer',
-        'pelatih_id' => 'integer',
+        'siswa_id'   => 'string',
+        'pelatih_id' => 'string',
     ];
 
     // Relationships

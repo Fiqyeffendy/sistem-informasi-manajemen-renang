@@ -4,12 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SIMPEL-Fella</title>
+    <meta name="description" content="Sistem Informasi Manajemen Pelatihan Les Renang Fella" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/variables.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/shell.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/login.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/components.css') }}" />
 </head>
 <body>
@@ -18,39 +21,37 @@
     <div id="app-shell" class="active" style="display:flex;">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-brand">
-                <div class="d-flex align-items-center">
+                <div class="sidebar-brand-inner">
                     <div class="brand-logo"><i class="bi bi-water"></i></div>
-                    <div class="ms-2">
-                        <span>SIMPEL-Fella</span>
-                        <small>Les Renang</small>
+                    <div class="brand-text-wrap">
+                        <span class="brand-name">SIMPEL-Fella</span>
+                        <span class="brand-sub">Manajemen Kursus Renang</span>
                     </div>
                 </div>
             </div>
 
             <nav class="sidebar-nav" id="nav-admin" style="display: {{ request()->routeIs('admin.*') ? 'block' : 'none' }};">
-                <div class="nav-section-label">Utama</div>
-                <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
-                <div class="nav-section-label">Manajemen</div>
-                <a class="nav-link {{ request()->routeIs('admin.siswa') ? 'active' : '' }}" href="{{ route('admin.siswa') }}"><i class="bi bi-people"></i> Data Siswa</a>
-                <a class="nav-link {{ request()->routeIs('admin.pendaftaran') ? 'active' : '' }}" href="{{ route('admin.pendaftaran') }}"><i class="bi bi-card-list"></i> Pendaftaran</a>
-                <a class="nav-link {{ request()->routeIs('admin.pelatih') ? 'active' : '' }}" href="{{ route('admin.pelatih') }}"><i class="bi bi-person-badge"></i> Data Pelatih</a>
-                <a class="nav-link {{ request()->routeIs('admin.jadwal') ? 'active' : '' }}" href="{{ route('admin.jadwal') }}"><i class="bi bi-calendar3"></i> Jadwal Latihan</a>
-                <a class="nav-link {{ request()->routeIs('admin.presensi') ? 'active' : '' }}" href="{{ route('admin.presensi') }}"><i class="bi bi-clipboard-check"></i> Presensi</a>
-                <a class="nav-link {{ request()->routeIs('admin.sesi') ? 'active' : '' }}" href="{{ route('admin.sesi') }}"><i class="bi bi-hourglass-split"></i> Sesi Latihan</a>
-                <div class="nav-section-label">Analitik</div>
+                <div class="nav-section-label">MENU UTAMA</div>
+                <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-grid"></i> Dashboard</a>
+                <a class="nav-link {{ request()->routeIs('admin.siswa') ? 'active' : '' }}" href="{{ route('admin.siswa') }}"><i class="bi bi-people"></i> Siswa</a>
+                <a class="nav-link {{ request()->routeIs('admin.pendaftaran') ? 'active' : '' }}" href="{{ route('admin.pendaftaran') }}"><i class="bi bi-person-plus"></i> Pendaftaran</a>
+                <a class="nav-link {{ request()->routeIs('admin.pelatih') ? 'active' : '' }}" href="{{ route('admin.pelatih') }}"><i class="bi bi-person-badge"></i> Pelatih</a>
+                <a class="nav-link {{ request()->routeIs('admin.jadwal') ? 'active' : '' }}" href="{{ route('admin.jadwal') }}"><i class="bi bi-calendar3"></i> Jadwal</a>
+                <a class="nav-link {{ request()->routeIs('admin.presensi') ? 'active' : '' }}" href="{{ route('admin.presensi') }}"><i class="bi bi-clipboard-check"></i> Kehadiran</a>
+                <a class="nav-link {{ request()->routeIs('admin.sesi') ? 'active' : '' }}" href="{{ route('admin.sesi') }}"><i class="bi bi-hourglass-split"></i> Sisa Sesi</a>
                 <a class="nav-link {{ request()->routeIs('admin.laporan') ? 'active' : '' }}" href="{{ route('admin.laporan') }}"><i class="bi bi-bar-chart-line"></i> Laporan</a>
             </nav>
 
             <nav class="sidebar-nav" id="nav-pelatih" style="display: {{ request()->routeIs('pelatih.*') ? 'block' : 'none' }};">
-                <div class="nav-section-label">Menu</div>
-                <a class="nav-link {{ request()->routeIs('pelatih.dashboard') ? 'active' : '' }}" href="{{ route('pelatih.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                <div class="nav-section-label">MENU UTAMA</div>
+                <a class="nav-link {{ request()->routeIs('pelatih.dashboard') ? 'active' : '' }}" href="{{ route('pelatih.dashboard') }}"><i class="bi bi-grid"></i> Dashboard</a>
                 <a class="nav-link {{ request()->routeIs('pelatih.jadwal') ? 'active' : '' }}" href="{{ route('pelatih.jadwal') }}"><i class="bi bi-calendar3"></i> Jadwal Saya</a>
                 <a class="nav-link {{ request()->routeIs('pelatih.siswa') ? 'active' : '' }}" href="{{ route('pelatih.siswa') }}"><i class="bi bi-people"></i> Daftar Siswa</a>
                 <a class="nav-link {{ request()->routeIs('pelatih.presensi') ? 'active' : '' }}" href="{{ route('pelatih.presensi') }}"><i class="bi bi-clipboard-check"></i> Input Presensi</a>
             </nav>
 
             <nav class="sidebar-nav" id="nav-siswa" style="display: {{ request()->routeIs('siswa.*') ? 'block' : 'none' }};">
-                <div class="nav-section-label">Menu</div>
+                <div class="nav-section-label">MENU UTAMA</div>
                 <a class="nav-link {{ request()->routeIs('siswa.dashboard') ? 'active' : '' }}" href="{{ route('siswa.dashboard') }}"><i class="bi bi-house"></i> Beranda</a>
                 <a class="nav-link {{ request()->routeIs('siswa.jadwal') ? 'active' : '' }}" href="{{ route('siswa.jadwal') }}"><i class="bi bi-calendar3"></i> Jadwal Latihan</a>
                 <a class="nav-link {{ request()->routeIs('siswa.presensi') ? 'active' : '' }}" href="{{ route('siswa.presensi') }}"><i class="bi bi-clock-history"></i> Riwayat Presensi</a>
@@ -59,13 +60,15 @@
 
             <div class="sidebar-footer">
                 <div class="user-chip">
-                    <div class="user-avatar" id="user-avatar-text">A</div>
+                    <div class="user-avatar" id="user-avatar-text" style="background: var(--primary);">A</div>
                     <div class="info flex-grow-1">
-                        <span id="sidebar-user-name">Admin</span>
-                        <small id="sidebar-user-role">Administrator</small>
+                        <span id="sidebar-user-name" style="font-weight:600; color:var(--text-main);">Admin</span>
+                        <small id="sidebar-user-role" style="color:var(--text-secondary);">admin@simpelfella.id</small>
                     </div>
-                    <a class="btn-logout" href="{{ route('auth.login') }}" title="Keluar">
-                        <i class="bi bi-box-arrow-right"></i>
+                </div>
+                <div style="padding: 0.25rem 0.5rem;">
+                    <a class="nav-link" href="{{ route('auth.login') }}" style="display:flex; align-items:center; gap:0.625rem; padding:0.5rem 0.875rem; color:var(--text-secondary); text-decoration:none; font-size:0.855rem; font-weight:500;">
+                        <i class="bi bi-box-arrow-left"></i> Keluar
                     </a>
                 </div>
             </div>
@@ -73,12 +76,19 @@
 
         <div class="main-content">
             <div class="topbar">
-                <div class="d-flex align-items-center gap-3">
+                <div class="topbar-left">
                     <button class="btn-hamburger" id="btn-toggle-sidebar"><i class="bi bi-list"></i></button>
                     <h5 id="topbar-title">Dashboard</h5>
                 </div>
                 <div class="right">
-                    <span class="badge-date d-none d-sm-block" id="topbar-date"></span>
+                    <div class="search-input-wrap d-none d-md-block">
+                        <i class="bi bi-search"></i>
+                        <input type="text" placeholder="Cari...">
+                    </div>
+                    <button class="topbar-icon-btn position-relative" title="Notifikasi" style="background:#fff; border:1px solid var(--border); border-radius:9px; width:34px; height:34px; display:flex; align-items:center; justify-content:center;">
+                        <i class="bi bi-bell"></i>
+                        <span class="position-absolute bg-primary border border-light rounded-circle" style="width:6px; height:6px; top:8px; right:8px;"></span>
+                    </button>
                 </div>
             </div>
 

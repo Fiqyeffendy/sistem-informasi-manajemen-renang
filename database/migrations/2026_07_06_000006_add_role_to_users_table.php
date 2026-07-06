@@ -10,16 +10,20 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->enum('role', ['admin', 'pelatih', 'siswa'])->default('siswa')->after('email');
-            $table->foreignId('pelatih_id')->nullable()->constrained('pelatih')->nullOnDelete()->after('role');
-            $table->foreignId('siswa_id')->nullable()->constrained('siswa')->nullOnDelete()->after('pelatih_id');
+            $table->string('pelatih_id', 50)->nullable()->after('role');
+            $table->foreign('pelatih_id')->references('id')->on('pelatih')->nullOnDelete();
+            $table->string('siswa_id', 50)->nullable()->after('pelatih_id');
+            $table->foreign('siswa_id')->references('id')->on('siswa')->nullOnDelete();
         });
     }
 
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('pelatih_id');
-            $table->dropConstrainedForeignId('siswa_id');
+            $table->dropForeign(['pelatih_id']);
+            $table->dropColumn('pelatih_id');
+            $table->dropForeign(['siswa_id']);
+            $table->dropColumn('siswa_id');
             $table->dropColumn('role');
         });
     }

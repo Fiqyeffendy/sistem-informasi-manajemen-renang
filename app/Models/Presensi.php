@@ -21,8 +21,8 @@ class Presensi extends Model
     protected $casts = [
         'tanggal'    => 'date',
         'jadwal_id'  => 'integer',
-        'siswa_id'   => 'integer',
-        'pelatih_id' => 'integer',
+        'siswa_id'   => 'string',
+        'pelatih_id' => 'string',
     ];
 
     // Relationships

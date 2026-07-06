@@ -9,6 +9,9 @@ class Pelatih extends Model
 {
     protected $table = 'pelatih';
 
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $fillable = [
         'nama',
         'no_hp',
@@ -18,6 +21,23 @@ class Pelatih extends Model
         'status',
         'alasan_cuti',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($pelatih) {
+            if (empty($pelatih->id)) {
+                // Get the last record sorted by parsing the numeric part of the ID string
+                $lastPelatih = Pelatih::orderByRaw("CAST(SUBSTRING(id, 2) AS INTEGER) DESC")->first();
+                if ($lastPelatih) {
+                    $lastNum = (int) substr($lastPelatih->id, 1);
+                    $nextNum = $lastNum + 1;
+                } else {
+                    $nextNum = 1;
+                }
+                $pelatih->id = 'P' . str_pad($nextNum, 3, '0', STR_PAD_LEFT);
+            }
+        });
+    }
 
     protected $casts = [
         'spesialisasi'    => 'array',

@@ -73,7 +73,7 @@ class PendaftaranController extends Controller
             'status' => 'sometimes|required|in:pending,diterima,ditolak',
             'verified_by' => 'nullable|string|max:255',
             'verified_at' => 'nullable|date',
-            'siswa_id' => 'nullable|integer',
+            'siswa_id' => 'nullable|string',
         ]);
 
         // Prevent changing status if already accepted/rejected
