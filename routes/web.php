@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('landing');
 });
 
 Route::view('/login', 'auth.login')->name('auth.login');
