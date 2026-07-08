@@ -3,6 +3,7 @@
 use App\Models\User;
 
 return [
+    // Konfigurasi autentikasi utama untuk guard web dan provider pengguna.
 
     /*
     |--------------------------------------------------------------------------

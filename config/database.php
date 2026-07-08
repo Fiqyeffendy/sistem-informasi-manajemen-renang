@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 use Pdo\Mysql;
 
 return [
+    // Konfigurasi koneksi database default dan opsi driver yang didukung Laravel.
 
     /*
     |--------------------------------------------------------------------------

@@ -1,3 +1,4 @@
+{{-- Halaman landing page yang memperkenalkan brand dan program les renang. --}}
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -20,7 +21,6 @@
         <nav class="nav-links" aria-label="Navigasi utama">
             <a href="#home">Beranda</a>
             <a href="#program">Program</a>
-            <a href="#benefits">Keunggulan</a>
             <a href="#gallery">Galeri</a>
             <a href="#testimonials">Testimoni</a>
             <a href="#faq">FAQ</a>
@@ -108,6 +108,20 @@
                 <span>Swift Club</span>
                 <span>AquaStars</span>
                 <span>Wave Academy</span>
+            </div>
+        </section>
+
+        <section class="section why-section">
+            <div class="section-heading">
+                <span class="eyebrow">Mengapa Orang Tua Percaya</span>
+                <h2>Kursus renang yang aman, terarah, dan nyaman untuk anak Anda</h2>
+                <p>Program kami dirancang agar anak belajar dengan tenang, orang tua merasa terbantu, dan setiap sesi terasa lebih berarti.</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-item"><i class="bi bi-shield-check"></i><div><h3>Pelatih Profesional</h3><p>Instruktur berpengalaman yang sabar dan aman dalam mengajar setiap level.</p></div></div>
+                <div class="why-item"><i class="bi bi-laptop"></i><div><h3>Informasi Terpadu</h3><p>Semua data les, jadwal, dan perkembangan bisa dipantau dengan mudah.</p></div></div>
+                <div class="why-item"><i class="bi bi-journal-check"></i><div><h3>Pendaftaran Praktis</h3><p>Proses daftar yang simpel dan cepat untuk orang tua maupun siswa.</p></div></div>
+                <div class="why-item"><i class="bi bi-eye"></i><div><h3>Perkembangan Jelas</h3><p>Setiap kemajuan siswa dapat dilihat dengan lebih transparan dan terarah.</p></div></div>
             </div>
         </section>
 
@@ -214,48 +228,6 @@
                         <a href="{{ route('auth.register') }}" class="text-link">Daftar Sekarang</a>
                     </div>
                 </article>
-            </div>
-        </section>
-
-        <section class="section benefits-results">
-            <div class="section-heading">
-                <span class="eyebrow">Hasil Nyata</span>
-                <h2>Apa yang siswa dapatkan dari kursus kami</h2>
-            </div>
-            <div class="results-grid">
-                <div class="result-card">
-                    <div class="result-icon">🏊</div>
-                    <h3>Teknik Renang Benar</h3>
-                    <p>Siswa menguasai teknik stroke yang benar dan efisien dari pelatih berpengalaman.</p>
-                </div>
-                <div class="result-card">
-                    <div class="result-icon">💪</div>
-                    <h3>Percaya Diri di Air</h3>
-                    <p>Dari takut air menjadi berani, siswa belajar dengan lambat tapi pasti dan aman.</p>
-                </div>
-                <div class="result-card">
-                    <div class="result-icon">📈</div>
-                    <h3>Kemampuan Berkembang</h3>
-                    <p>Setiap sesi diukur dan dilaporkan, orang tua melihat jelas perkembangan anak.</p>
-                </div>
-                <div class="result-card">
-                    <div class="result-icon">🎯</div>
-                    <h3>Target Tercapai</h3>
-                    <p>Dari pemula hingga lanjutan, siswa mencapai setiap milestone dengan bangga.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section why-section">
-            <div class="section-heading">
-                <span class="eyebrow">Kenapa Orang Tua Memilih Kami</span>
-                <h2>Les renang yang nyaman untuk anak, praktis untuk orang tua, dan profesional untuk pelatih</h2>
-            </div>
-            <div class="why-grid">
-                <div class="why-item"><i class="bi bi-shield-check"></i><div><h3>Pelatih Profesional</h3><p>Instruktur berpengalaman yang sabar dan aman dalam mengajar setiap level.</p></div></div>
-                <div class="why-item"><i class="bi bi-laptop"></i><div><h3>Informasi Terpadu</h3><p>Semua data les, jadwal, dan perkembangan bisa dipantau dengan mudah.</p></div></div>
-                <div class="why-item"><i class="bi bi-journal-check"></i><div><h3>Pendaftaran Praktis</h3><p>Proses daftar yang simpel dan cepat untuk orang tua maupun siswa.</p></div></div>
-                <div class="why-item"><i class="bi bi-eye"></i><div><h3>Perkembangan Jelas</h3><p>Setiap kemajuan siswa dapat dilihat dengan lebih transparan dan terarah.</p></div></div>
             </div>
         </section>
 
@@ -371,24 +343,24 @@
             </div>
             <div class="faq-list">
                 <details class="faq-item" open>
-                    <summary>Apakah kursus ini cocok untuk pemula?</summary>
-                    <p>Ya. Kami menyediakan program pemula yang aman, santai, dan disesuaikan dengan kebutuhan belajar awal di air.</p>
+                    <summary>Apakah ada program yang cocok untuk balita?</summary>
+                    <p>Ya. Program Fella WaterBabies dirancang khusus untuk balita dengan pendekatan aman, santai, dan penuh permainan.</p>
                 </details>
                 <details class="faq-item">
-                    <summary>Apakah ada program untuk anak dan dewasa?</summary>
-                    <p>Tentu. Kami menyiapkan kelas yang sesuai untuk anak, remaja, dan dewasa agar setiap peserta nyaman belajar sesuai usia dan kemampuan.</p>
+                    <summary>Apakah ada program untuk anak, remaja, dan dewasa?</summary>
+                    <p>Tentu. Kami menyediakan Fella SwimStars untuk anak, Fella AquaFit untuk remaja dan dewasa, serta Fella SwimElite untuk atlet atau yang ingin fokus pada kompetisi.</p>
                 </details>
                 <details class="faq-item">
                     <summary>Bagaimana cara memilih jadwal yang sesuai?</summary>
-                    <p>Anda dapat memilih jadwal yang paling nyaman berdasarkan kebutuhan keluarga dan ketersediaan waktu belajar.</p>
+                    <p>Anda dapat memilih jadwal yang paling nyaman berdasarkan kebutuhan keluarga, lokasi les, dan target belajar masing-masing siswa.</p>
                 </details>
                 <details class="faq-item">
                     <summary>Apakah orang tua bisa memantau perkembangan siswa?</summary>
-                    <p>Ya. Orang tua dapat melihat perkembangan belajar, kehadiran, dan pencapaian siswa dari setiap sesi.</p>
+                    <p>Ya. Orang tua bisa melihat perkembangan belajar, kehadiran, dan pencapaian siswa dari setiap sesi secara lebih jelas.</p>
                 </details>
                 <details class="faq-item">
-                    <summary>Apakah ada fasilitas pendukung untuk belajar renang?</summary>
-                    <p>Ya. Kami menyediakan lingkungan belajar yang aman, terarah, dan didukung oleh pelatih yang berpengalaman.</p>
+                    <summary>Apakah ada pilihan lokasi les yang fleksibel?</summary>
+                    <p>Ya. Kami menyediakan beberapa lokasi les yang dapat dipilih sesuai kenyamanan dan kemudahan akses keluarga.</p>
                 </details>
             </div>
         </section>
@@ -410,9 +382,10 @@
         </div>
         <div>
             <h4>Program</h4>
-            <a href="#program">Pemula</a>
-            <a href="#program">Menengah</a>
-            <a href="#program">Lanjutan</a>
+            <a href="#program">Fella WaterBabies</a>
+            <a href="#program">Fella SwimStars</a>
+            <a href="#program">Fella AquaFit</a>
+            <a href="#program">Fella SwimElite</a>
         </div>
         <div>
             <h4>Bantuan</h4>

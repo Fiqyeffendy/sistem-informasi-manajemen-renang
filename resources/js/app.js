@@ -1,4 +1,3 @@
-import './auth.js';
+// Entry point frontend yang memuat logika utama dan utilitas UI.
 import './main.js';
-import './shell.js';
 import './ui.js';

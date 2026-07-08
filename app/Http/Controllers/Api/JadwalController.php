@@ -9,12 +9,14 @@ use Illuminate\Http\Request;
 class JadwalController extends Controller
 {
     // GET /api/jadwal
+    // Ambil semua jadwal beserta relasi siswa dan pelatih.
     public function index()
     {
         return response()->json(Jadwal::with(['siswa', 'pelatih'])->get(), 200);
     }
 
     // POST /api/jadwal
+    // Buat jadwal baru setelah validasi input.
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -33,12 +35,14 @@ class JadwalController extends Controller
     }
 
     // GET /api/jadwal/{jadwal}
+    // Ambil detail jadwal dengan relasi lengkap.
     public function show(Jadwal $jadwal)
     {
         return response()->json($jadwal->load(['siswa', 'pelatih']), 200);
     }
 
     // PUT /api/jadwal/{jadwal}
+    // Update data jadwal.
     public function update(Request $request, Jadwal $jadwal)
     {
         $validated = $request->validate([

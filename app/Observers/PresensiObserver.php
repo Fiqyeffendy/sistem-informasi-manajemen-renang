@@ -6,22 +6,16 @@ use App\Models\Presensi;
 
 class PresensiObserver
 {
-    /**
-     * Ketika presensi baru dibuat:
-     * - Jika status hadir → increment sesi_terpakai siswa.
-     */
+    // Saat presensi hadir dibuat, sesi siswa otomatis bertambah.
     public function created(Presensi $presensi): void
     {
+        // Saat presensi hadir dibuat, tambahkan satu sesi terpakai untuk siswa.
         if ($presensi->status === 'hadir') {
             $presensi->siswa()->increment('sesi_terpakai');
         }
     }
 
-    /**
-     * Ketika presensi diupdate:
-     * - Jika status berubah dari bukan-hadir → hadir, increment sesi.
-     * - Jika status berubah dari hadir → bukan-hadir, decrement sesi.
-     */
+    // Saat status presensi berubah, saldo sesi siswa ikut disesuaikan.
     public function updated(Presensi $presensi): void
     {
         $oldStatus = $presensi->getOriginal('status');
@@ -34,10 +28,7 @@ class PresensiObserver
         }
     }
 
-    /**
-     * Ketika presensi dihapus:
-     * - Jika statusnya hadir, decrement sesi_terpakai siswa.
-     */
+    // Saat presensi dihapus, sesi yang sebelumnya tercatat dikurangi kembali.
     public function deleted(Presensi $presensi): void
     {
         if ($presensi->status === 'hadir') {

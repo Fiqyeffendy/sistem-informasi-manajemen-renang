@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Presensi extends Model
 {
+    // Model ini merekam status hadir, izin, atau alpha untuk setiap jadwal siswa.
     protected $table = 'presensi';
 
     protected $fillable = [

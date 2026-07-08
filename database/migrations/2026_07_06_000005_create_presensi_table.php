@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Tabel presensi mencatat status kehadiran setiap siswa pada jadwal tertentu.
     public function up(): void
     {
         Schema::create('presensi', function (Blueprint $table) {

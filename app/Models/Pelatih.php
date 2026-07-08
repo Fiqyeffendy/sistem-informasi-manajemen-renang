@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pelatih extends Model
 {
+    // Model ini menyimpan profil pelatih dan relasi jadwal serta presensi mereka.
     protected $table = 'pelatih';
 
     protected $keyType = 'string';

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Tabel jadwal menghubungkan siswa, pelatih, hari, dan jam latihan.
     public function up(): void
     {
         Schema::create('jadwal', function (Blueprint $table) {

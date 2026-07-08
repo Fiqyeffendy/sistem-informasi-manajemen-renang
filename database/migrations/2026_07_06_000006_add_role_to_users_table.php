@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Migrasi ini menambahkan role pengguna serta relasi ke siswa atau pelatih.
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {

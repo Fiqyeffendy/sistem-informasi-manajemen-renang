@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
-    // GET /api/siswa - Ambil semua siswa
+    // GET /api/siswa - Ambil semua siswa.
+    // Endpoint API ini digunakan oleh frontend untuk menampilkan daftar siswa.
     public function index()
     {
         return response()->json(Siswa::all(), 200);

@@ -1,3 +1,4 @@
+{{-- Layout utama aplikasi yang menyusun sidebar, topbar, dan konten halaman. --}}
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -60,16 +61,32 @@
 
             <div class="sidebar-footer">
                 <div class="user-chip">
-                    <div class="user-avatar" id="user-avatar-text" style="background: var(--primary);">A</div>
+                    @php
+                        $user = Auth::user();
+                        $name = $user?->name ?? 'User';
+                        $email = $user?->email ?? '';
+                        $initials = '';
+                        if ($name) {
+                            $words = explode(' ', trim($name));
+                            $initials = strtoupper(substr($words[0], 0, 1));
+                            if (count($words) > 1) {
+                                $initials .= strtoupper(substr($words[1], 0, 1));
+                            }
+                        }
+                    @endphp
+                    <div class="user-avatar" id="user-avatar-text" style="background: var(--primary);">{{ $initials }}</div>
                     <div class="info flex-grow-1">
-                        <span id="sidebar-user-name" style="font-weight:600; color:var(--text-main);">Admin</span>
-                        <small id="sidebar-user-role" style="color:var(--text-secondary);">admin@simpelfella.id</small>
+                        <span id="sidebar-user-name" style="font-weight:600; color:var(--text-main);">{{ $name }}</span>
+                        <small id="sidebar-user-role" style="color:var(--text-secondary);">{{ $email }}</small>
                     </div>
                 </div>
                 <div style="padding: 0.25rem 0.5rem;">
-                    <a class="nav-link" href="{{ route('auth.login') }}" style="display:flex; align-items:center; gap:0.625rem; padding:0.5rem 0.875rem; color:var(--text-secondary); text-decoration:none; font-size:0.855rem; font-weight:500;">
-                        <i class="bi bi-box-arrow-left"></i> Keluar
-                    </a>
+                    <form method="POST" action="{{ route('auth.logout') }}" style="margin:0;">
+                        @csrf
+                        <button type="submit" class="nav-link" style="display:flex; align-items:center; gap:0.625rem; padding:0.5rem 0.875rem; color:var(--text-secondary); text-decoration:none; font-size:0.855rem; font-weight:500; border:none; background:none; width:100%; text-align:left; cursor:pointer;">
+                            <i class="bi bi-box-arrow-left"></i> Keluar
+                        </button>
+                    </form>
                 </div>
             </div>
         </aside>
@@ -78,7 +95,18 @@
             <div class="topbar">
                 <div class="topbar-left">
                     <button class="btn-hamburger" id="btn-toggle-sidebar"><i class="bi bi-list"></i></button>
-                    <h5 id="topbar-title">Dashboard</h5>
+                    <h5 id="topbar-title">
+                        @if(request()->routeIs('*.dashboard')) Dashboard
+                        @elseif(request()->routeIs('*.siswa')) Daftar Siswa
+                        @elseif(request()->routeIs('*.pendaftaran')) Pendaftaran
+                        @elseif(request()->routeIs('*.pelatih')) Pelatih
+                        @elseif(request()->routeIs('*.jadwal')) Jadwal Mengajar
+                        @elseif(request()->routeIs('*.presensi')) Presensi Kehadiran
+                        @elseif(request()->routeIs('*.sesi')) Sisa Sesi
+                        @elseif(request()->routeIs('*.laporan')) Laporan
+                        @else SIMPEL-Fella
+                        @endif
+                    </h5>
                 </div>
                 <div class="right">
                     <div class="search-input-wrap d-none d-md-block">

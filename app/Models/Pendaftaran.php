@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pendaftaran extends Model
 {
+    // Model ini menyimpan data pendaftaran awal siswa sebelum akun dan jadwal aktif dibuat.
     protected $table = 'pendaftaran';
 
     protected $fillable = [
@@ -19,6 +20,7 @@ class Pendaftaran extends Model
         'no_whatsapp',
         'nama_wali',
         'hubungan_wali',
+        'no_hp_wali',
         'alamat',
         'instagram',
         'catatan',
@@ -26,6 +28,7 @@ class Pendaftaran extends Model
         'jenis_program',
         'lokasi_les',
         'status',
+        'tipe_pendaftar',
         'tanggal_daftar',
         'verified_by',
         'verified_at',

@@ -8,17 +8,13 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+    // Tempat mendaftarkan layanan tambahan jika dibutuhkan.
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
+    // Saat aplikasi boot, pasang observer agar presensi otomatis mempengaruhi sesi siswa.
     public function boot(): void
     {
         Presensi::observe(PresensiObserver::class);

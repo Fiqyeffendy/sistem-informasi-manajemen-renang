@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+{{-- Halaman ini mengelola jadwal kelas harian, mingguan, dan backup. --}}
 
-{{-- Page Header --}}
+{{-- Header halaman yang berisi judul dan tombol aksi utama. --}}
 <div class="page-header fade-in d-flex justify-content-between align-items-center flex-wrap gap-2">
   <div>
     <h1>Jadwal Kelas</h1>
@@ -18,7 +19,7 @@
   </div>
 </div>
 
-{{-- Top Toolbar --}}
+{{-- Toolbar pencarian dan ringkasan data jadwal. --}}
 <div class="card-custom fade-in mb-4">
   <div class="card-body py-3">
     <div class="table-toolbar">
@@ -38,7 +39,7 @@
   </div>
 </div>
 
-{{-- Tabel 1: Jadwal Latihan Hari Ini --}}
+{{-- Tabel jadwal latihan hari ini dengan status dan aksi cepat. --}}
 <div class="card-custom fade-in mb-4" style="border-left: 4px solid var(--primary, #1a6bff);">
   <div class="card-header border-bottom-0 pb-0 d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-2">
@@ -69,7 +70,7 @@
   </div>
 </div>
 
-{{-- Tabel 2: Jadwal Latihan Perminggu --}}
+{{-- Tabel jadwal latihan mingguan yang lebih luas. --}}
 <div class="card-custom fade-in mb-4" style="border-left: 4px solid #10b981;">
   <div class="card-header border-bottom-0 pb-0 d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-2">
@@ -100,7 +101,7 @@
   </div>
 </div>
 
-{{-- Tabel 3: Jadwal Backup --}}
+{{-- Tabel jadwal backup untuk sesi pengganti. --}}
 <div class="card-custom fade-in mb-4" style="border-left: 4px solid #f59e0b;">
   <div class="card-header border-bottom-0 pb-0 d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-2">

@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+{{-- Halaman ini menampilkan daftar pendaftaran siswa yang menunggu diproses admin. --}}
 
-{{-- Page Header --}}
+{{-- Header halaman dengan judul dan tombol tambah pendaftaran. --}}
 <div class="page-header fade-in d-flex justify-content-between align-items-center flex-wrap gap-2">
   <div>
     <h1>Pendaftaran</h1>
@@ -18,9 +19,8 @@
   </div>
 </div>
 
-{{-- Table Card --}}
+{{-- Tabel pendaftaran yang akan diisi dari data dinamis. --}}
 <div class="card-custom fade-in">
-  {{-- Toolbar --}}
   <div class="card-body py-3 border-bottom">
     <div class="table-toolbar">
       <div class="table-toolbar-left" style="gap:8px;">
@@ -38,7 +38,6 @@
     </div>
   </div>
 
-  {{-- Table --}}
   <div class="table-responsive">
     <table class="table table-custom table-hover mb-0">
       <thead>
@@ -59,7 +58,6 @@
     </table>
   </div>
 
-  {{-- Pagination --}}
   <div class="pagination-wrap">
     <span class="pagination-info" id="pendaftaran-page-summary">Menampilkan 0-0 dari 0 data</span>
     <nav>
@@ -72,7 +70,7 @@
   </div>
 </div>
 
-{{-- Modal Tambah Pendaftaran --}}
+{{-- Modal untuk menambahkan data pendaftaran baru. --}}
 <div class="modal fade" id="modal-tambah-pendaftaran" tabindex="-1">
   <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
     <div class="modal-content">

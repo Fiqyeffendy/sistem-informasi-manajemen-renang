@@ -1,50 +1,5 @@
-// ═══════════════════════════════════
-//  main.js – App Entry Point
-//  Menginisialisasi aplikasi dan mengikat event handler global.
-//  Semua interaksi UI sekarang menggunakan data-action delegation.
-// ═══════════════════════════════════
-
+// Entry point utama frontend yang mengatur interaksi halaman admin dan dashboard.
 (function () {
-  function initDynamicSections() {
-    const map = {
-      // Admin
-      'dashboard-admin': document.getElementById('root-dashboard-admin'),
-      'data-siswa': document.getElementById('root-data-siswa'),
-      'data-pelatih': document.getElementById('root-data-pelatih'),
-      'jadwal': document.getElementById('root-jadwal'),
-      'presensi': document.getElementById('root-presensi'),
-      'sesi': document.getElementById('root-sesi'),
-      'laporan': document.getElementById('root-laporan'),
-
-      // Pelatih
-      'dashboard-pelatih': document.getElementById('root-dashboard-pelatih'),
-      'jadwal-pelatih': document.getElementById('root-jadwal-pelatih'),
-      'siswa-pelatih': document.getElementById('root-siswa-pelatih'),
-      'input-presensi': document.getElementById('root-input-presensi'),
-
-      // Siswa
-      'dashboard-siswa': document.getElementById('root-dashboard-siswa'),
-      'jadwal-siswa': document.getElementById('root-jadwal-siswa'),
-      'riwayat-presensi': document.getElementById('root-riwayat-presensi'),
-      'sesi-siswa': document.getElementById('root-sesi-siswa'),
-    };
-
-    Object.keys(map).forEach(sectionId => {
-      const rootEl = map[sectionId];
-      const sectionEl = document.getElementById(sectionId);
-      if (!rootEl || !sectionEl) return;
-
-      // jangan ada markup lama yang tersisa untuk section ini
-      // (index.html sebelumnya sempat kebablasan ada markup lama yang bikin layout berantakan)
-      sectionEl.querySelectorAll(':scope > :not(#' + rootEl.id + ')').forEach(el => el.remove());
-
-      // konten dipastikan kosong sebelum di-load partial
-      rootEl.innerHTML = '';
-      sectionEl.dataset.partialLoaded = 'false';
-    });
-  }
-
-
   const API_BASE_URL = '/api';
 
   function formatSiswaId(id) {
@@ -54,6 +9,7 @@
     return `S${String(number).padStart(3, '0')}`;
   }
 
+  // Muat daftar siswa dari API dan render ke tabel admin.
   async function loadSiswaList() {
     const tbody = document.getElementById('siswa-table-body');
     const summary = document.getElementById('siswa-table-summary');
@@ -156,6 +112,7 @@
     }
   }
 
+  // Simpan data siswa baru dari modal tambah.
   async function saveSiswaFromModal() {
     const nama = document.getElementById('siswa-nama')?.value?.trim();
     const umur = document.getElementById('siswa-umur')?.value;
@@ -214,6 +171,7 @@ const totalSesi = document.getElementById('siswa-total-sesi')?.value ? Number(do
     }
   }
 
+  // Isi form edit siswa dengan data yang dipilih.
   function openEditSiswa(id, nama, umur, program, jenisProgram, lokasiLes, totalSesi, noHp) {
     window.currentEditSiswaId = id;
     document.getElementById('siswa-edit-nama').value = nama || '';
@@ -226,6 +184,7 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
     if (window.openModal) window.openModal('modal-edit-siswa');
   }
 
+  // Isi form edit pelatih dengan data yang dipilih.
   function openEditPelatih(id, nama, noHp, spesialisasi, jadwal, status, alasanCuti) {
     window.currentEditPelatihId = id;
     document.getElementById('pelatih-edit-nama').value = nama || '';
@@ -279,6 +238,7 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
 
   window.openEditPelatih = openEditPelatih;
 
+  // Kirim perubahan data siswa melalui API update.
   async function saveEditSiswaFromModal() {
     const id = window.currentEditSiswaId;
     if (!id) {
@@ -333,6 +293,7 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
     }
   }
 
+  // Hapus data siswa melalui endpoint API.
   async function deleteSiswa(id) {
     if (!id) {
       throw new Error('ID siswa tidak valid');
@@ -350,6 +311,7 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
 
   let pelatihItems = [];
 
+  // Muat daftar pelatih dan siapkan pencarian client-side.
   async function loadPelatihList() {
     const tbody = document.getElementById('pelatih-table-body');
     const summary = document.getElementById('pelatih-table-summary');
@@ -1001,10 +963,10 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
 
     tbody.innerHTML = filtered.map((item, idx) => {
       const tanggalDaftar = item.tanggal_daftar ? new Date(item.tanggal_daftar).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}) : '-';
-      // Disable accept button if not pending or if siswa_id already exists
-      const isDisabled = item.status !== 'pending' || item.siswa_id;
+      // Disable accept button if not pending
+      const isDisabled = item.status !== 'pending';
       const btnClass = isDisabled ? 'btn-outline-secondary' : 'btn-outline-success';
-      const btnTitle = item.siswa_id ? 'Sudah dibuat ke data siswa' : (item.status !== 'pending' ? `Sudah status: ${item.status}` : 'Terima & buat siswa');
+      const btnTitle = item.status !== 'pending' ? `Sudah status: ${item.status}` : 'Terima & aktifkan siswa';
 
       // Avatar initials
       const nama = (item.nama_lengkap || '-').replace(/</g, '&lt;');
@@ -1042,6 +1004,10 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
       // Registration number display
       const kode = item.kode_pendaftaran || `REG-${String(idx + 1).padStart(3, '0')}`;
 
+      const tipeBadge = item.tipe_pendaftar === 'self'
+        ? `<span class="badge bg-light text-primary border border-primary-subtle px-1.5 py-0.5" style="font-size:10px; font-weight:600; margin-left: 6px;">Mandiri</span>`
+        : `<span class="badge bg-light text-secondary border border-secondary-subtle px-1.5 py-0.5" style="font-size:10px; font-weight:600; margin-left: 6px;">Wali</span>`;
+
       return `
         <tr>
           <td><a href="#" class="text-primary fw-600" style="text-decoration:none; font-size:13px;">${kode}</a></td>
@@ -1049,7 +1015,10 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
             <div style="display:flex; align-items:center; gap:10px;">
               <div style="width:34px;height:34px;border-radius:50%;background:${avatarBg};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0;">${initials}</div>
               <div>
-                <div style="font-weight:600;font-size:14px;color:#1a1a2e;">${nama}</div>
+                <div style="display:flex; align-items:center; flex-wrap:wrap; gap:4px;">
+                  <div style="font-weight:600;font-size:14px;color:#1a1a2e;">${nama}</div>
+                  ${tipeBadge}
+                </div>
                 <div style="font-size:12px;color:#9ca3af;">${item.tempat_lahir || ''}</div>
               </div>
             </div>
@@ -1089,8 +1058,24 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
       catatan: document.getElementById('pendaftaran-catatan')?.value?.trim(),
     };
 
-    if (!payload.nama_lengkap || !payload.jenis_kelamin || !payload.tempat_lahir || !payload.tanggal_lahir || !payload.no_whatsapp || !payload.nama_wali || !payload.hubungan_wali || !payload.alamat) {
+    const isSelf = !payload.nama_wali;
+    if (isSelf) {
+      payload.tipe_pendaftar = 'self';
+      payload.nama_wali = payload.nama_lengkap;
+      payload.hubungan_wali = 'Diri Sendiri';
+      payload.no_hp_wali = payload.no_whatsapp;
+    } else {
+      payload.tipe_pendaftar = 'wali';
+      payload.no_hp_wali = payload.no_whatsapp;
+    }
+
+    if (!payload.nama_lengkap || !payload.jenis_kelamin || !payload.tempat_lahir || !payload.tanggal_lahir || !payload.no_whatsapp || !payload.alamat) {
       if (window.showToast) window.showToast('Lengkapi semua data penting terlebih dahulu.', 'danger');
+      return;
+    }
+
+    if (!isSelf && (!payload.nama_wali || !payload.hubungan_wali)) {
+      if (window.showToast) window.showToast('Lengkapi nama dan hubungan wali jika mendaftarkan anak/orang lain.', 'danger');
       return;
     }
 
@@ -1168,55 +1153,13 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
         throw new Error(`Pendaftaran sudah pernah diverifikasi dengan status "${item.status}". Tidak dapat diubah.`);
       }
 
-      if (item.siswa_id) {
-        throw new Error(`Pendaftaran ini sudah dibuat ke data siswa (ID: ${item.siswa_id}). Tidak dapat diverifikasi lagi.`);
-      }
-
-      // Calculate age from tanggal_lahir
-      const calculateAge = (birthDate) => {
-        if (!birthDate) return null;
-        const today = new Date();
-        const birth = new Date(birthDate);
-        let age = today.getFullYear() - birth.getFullYear();
-        const monthDiff = today.getMonth() - birth.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-          age--;
-        }
-        return age > 0 ? age : null;
-      };
-
-      // 1) create siswa from pendaftaran data first
-      // total_sesi default dari backend seharusnya 4.
-      // Jangan hardcode 12/4 di client agar konsisten.
-      const siswaPayload = {
-        nama: item.nama_lengkap,
-        umur: calculateAge(item.tanggal_lahir),
-        no_hp_ortu: item.no_whatsapp || null,
-        program: item.program || 'Fella WaterBabies (Swimming Lessons for Toddlers)',
-        jenis_program: item.jenis_program || 'Small Group',
-        lokasi_les: item.lokasi_les || 'Perumahan Istana Mentari',
-        sesi_terpakai: 0
-      };
-
-      const createRes = await fetch(`${API_BASE_URL}/siswa`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(siswaPayload)
-      });
-      const createData = await createRes.json().catch(()=>({}));
-      if (!createRes.ok) {
-        throw new Error(createData.message || `Gagal membuat siswa (${createRes.status})`);
-      }
-
-      const siswaId = createData.id || createData?.data?.id;
-      if (!siswaId) throw new Error('ID siswa tidak ditemukan dalam response');
-
-      // 2) update pendaftaran status -> diterima WITH siswa_id
+      // update pendaftaran status -> diterima
       const updRes = await fetch(`${API_BASE_URL}/pendaftaran/${id}`, {
         method: 'PUT', 
         headers: { 'Content-Type': 'application/json' }, 
         body: JSON.stringify({ 
           status: 'diterima', 
-          verified_by: 'admin',
-          siswa_id: siswaId
+          verified_by: 'admin'
         })
       });
       const updData = await updRes.json().catch(()=>({}));
@@ -1224,7 +1167,7 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
         throw new Error(updData.message || `Gagal memperbarui pendaftaran (${updRes.status})`);
       }
 
-      if (window.showToast) window.showToast('✓ Pendaftaran diterima dan siswa berhasil dibuat.', 'success');
+      if (window.showToast) window.showToast('✓ Pendaftaran berhasil diverifikasi dan akun siswa telah aktif.', 'success');
       if (window.loadPendaftaranList) await window.loadPendaftaranList();
       if (window.loadSiswaList) await window.loadSiswaList();
     } catch (err) {
@@ -1241,41 +1184,15 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
       if (el) el.addEventListener(event, handler);
     };
 
-    bind('#btn-toggle-pass', 'click', e => {
-      e.preventDefault();
-      if (window.togglePass) window.togglePass();
-    });
-
-    bind('#btn-login', 'click', e => {
-      e.preventDefault();
-      if (window.doLogin) window.doLogin();
-    });
-
     bind('#sidebar-overlay', 'click', () => {
       if (window.closeSidebar) window.closeSidebar();
-    });
-
-    bind('#btn-logout', 'click', () => {
-      if (window.doLogout) window.doLogout();
     });
 
     bind('#btn-toggle-sidebar', 'click', () => {
       if (window.toggleSidebar) window.toggleSidebar();
     });
 
-    ['nav-admin', 'nav-pelatih', 'nav-siswa'].forEach(navId => {
-      const navEl = document.getElementById(navId);
-      if (!navEl) return;
 
-      navEl.addEventListener('click', e => {
-        const link = e.target.closest('.nav-link');
-        if (!link || !navEl.contains(link)) return;
-        const sectionId = link.dataset.section;
-        if (!sectionId) return;
-        e.preventDefault();
-        if (window.showSection) window.showSection(sectionId, navId);
-      });
-    });
 
     document.body.addEventListener('click', async e => {
       const button = e.target.closest('[data-action]');
@@ -1428,32 +1345,7 @@ document.getElementById('siswa-edit-total-sesi').value = totalSesi || '4';
   }
 
   document.addEventListener('DOMContentLoaded', async () => {
-    const sections = document.querySelectorAll('.section');
-    sections.forEach(s => {
-      s.style.display = 'none';
-    });
-
-    const role = localStorage.getItem('simpel-fella-user-role') || 'siswa';
-    const roleNavMap = { admin: 'nav-admin', pelatih: 'nav-pelatih', siswa: 'nav-siswa' };
-    const navToShow = roleNavMap[role] || 'nav-siswa';
-    ['nav-admin', 'nav-pelatih', 'nav-siswa'].forEach(id => {
-      const nav = document.getElementById(id);
-      if (nav) nav.style.display = (id === navToShow ? 'block' : 'none');
-    });
-
-    initDynamicSections();
     attachGlobalEventHandlers();
-
-    const firstSection = document.querySelector('.section');
-    if (firstSection) {
-      firstSection.style.display = '';
-      firstSection.classList.add('fade-in');
-
-      const titleEl = document.getElementById('topbar-title');
-      if (titleEl && window.SECTION_TITLES?.[firstSection.id]) {
-        titleEl.textContent = window.SECTION_TITLES[firstSection.id];
-      }
-    }
 
     if (document.getElementById('siswa-table-body') && window.initDataSiswaPage) {
       window.initDataSiswaPage();

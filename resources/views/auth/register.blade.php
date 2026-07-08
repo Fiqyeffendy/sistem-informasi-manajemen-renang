@@ -1,3 +1,4 @@
+{{-- Halaman pendaftaran publik untuk membuat akun siswa baru. --}}
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -199,6 +200,42 @@
             margin-top: 5px;
             margin-bottom: 0;
         }
+
+        /* Selection Card Intro styling */
+        .selection-card {
+            background: var(--surface);
+            border: 2px solid var(--border) !important;
+            border-radius: 16px;
+            text-align: center;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            height: 100%;
+        }
+        .selection-card:hover {
+            border-color: var(--primary) !important;
+            background: var(--primary-light);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .selection-card .icon-circle {
+            width: 64px;
+            height: 64px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 1.5rem;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            transition: transform var(--transition-base);
+        }
+        .selection-card:hover .icon-circle {
+            transform: scale(1.1);
+            background: var(--primary);
+            color: var(--white);
+        }
     </style>
 </head>
 <body>
@@ -218,46 +255,79 @@
     </nav>
 
     <div class="reg-container">
-        {{-- PAGE TITLE --}}
-        <div class="reg-page-title">
-            <h1>Pendaftaran Siswa Baru</h1>
-            <p>Isi data pendaftaran dalam 4 langkah mudah untuk memulai sesi latihan renang.</p>
-        </div>
+        @if ($errors->any())
+            <div class="alert alert-danger" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        {{-- STEP INDICATOR --}}
-        <div class="step-indicator" id="step-indicator">
-            <div class="step-item active" data-step="1">
-                <div class="step-circle" id="sc-1">1</div>
-                <div class="step-label">Informasi<br>Siswa</div>
+        {{-- LAYAR AWAL: PILIHAN TIPE PENDAFTARAN --}}
+        <div id="selection-screen" class="fade-in py-4">
+            <div class="text-center mb-5">
+                <h1 class="fw-800 text-main mb-2" style="font-size:2.25rem; letter-spacing:-0.75px;">Pendaftaran Siswa Baru</h1>
+                <p class="text-secondary mb-0">Silakan pilih jenis pendaftaran di bawah ini untuk memulai.</p>
             </div>
-            <div class="step-item" data-step="2">
-                <div class="step-circle" id="sc-2">2</div>
-                <div class="step-label">Informasi<br>Orang Tua</div>
-            </div>
-            <div class="step-item" data-step="3">
-                <div class="step-circle" id="sc-3">3</div>
-                <div class="step-label">Program &amp;<br>Jadwal</div>
-            </div>
-            <div class="step-item" data-step="4">
-                <div class="step-circle" id="sc-4">4</div>
-                <div class="step-label">Konfirmasi</div>
-            </div>
-        </div>
-
-        {{-- FORM CARD --}}
-        <div class="reg-card">
-            {{-- PROGRESS BAR --}}
-            <div class="reg-progress-bar">
-                <div class="reg-progress-fill" id="reg-progress" style="width:25%"></div>
-            </div>
-
-            {{-- STEP 1: INFORMASI SISWA --}}
-            <div class="step-panel active" id="panel-1">
-                <div class="reg-card-header">
-                    <h2><i class="bi bi-person-fill me-2" style="color:#1a6bff;"></i>Informasi Siswa</h2>
-                    <p>Isi data pribadi siswa yang akan mengikuti kursus renang.</p>
+            
+            <div class="row g-4 justify-content-center">
+                <div class="col-12 col-md-6 col-lg-5">
+                    <div class="selection-card" id="select-card-self">
+                        <div class="icon-circle">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <h3 class="fw-800 text-main fs-5 mb-2">Saya sendiri</h3>
+                        <p class="text-secondary small mb-0">Saya adalah siswa mandiri / dewasa yang akan mendaftar untuk diri saya sendiri.</p>
+                    </div>
                 </div>
-                <div class="reg-card-body">
+                <div class="col-12 col-md-6 col-lg-5">
+                    <div class="selection-card" id="select-card-wali">
+                        <div class="icon-circle">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <h3 class="fw-800 text-main fs-5 mb-2">Orang Tua / Wali</h3>
+                        <p class="text-secondary small mb-0">Saya mendaftarkan anak, keluarga, atau orang lain yang berada di bawah perwalian saya.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <p class="text-secondary small">Sudah memiliki akun login? <a href="{{ route('auth.login') }}" class="text-primary fw-600">Masuk di sini</a></p>
+            </div>
+        </div>
+
+        {{-- FORM WIZARD CONTAINER (Hidden by default) --}}
+        <div id="wizard-form-container" style="display: none;" class="fade-in">
+            {{-- PAGE TITLE --}}
+            <div class="reg-page-title">
+                <h1>Formulir Pendaftaran</h1>
+                <p>Silakan lengkapi formulir pendaftaran di bawah ini untuk memulai latihan renang.</p>
+            </div>
+
+            {{-- STEP INDICATOR --}}
+            <div class="step-indicator" id="step-indicator">
+                {{-- Di-render secara dinamis lewat JS --}}
+            </div>
+
+            {{-- FORM CARD --}}
+            <div class="reg-card">
+                {{-- PROGRESS BAR --}}
+                <div class="reg-progress-bar">
+                    <div class="reg-progress-fill" id="reg-progress" style="width:25%"></div>
+                </div>
+
+                {{-- Hidden input untuk menyimpan tipe pendaftaran --}}
+                <input type="hidden" name="tipe_pendaftar" id="reg-tipe-pendaftar" value="wali" />
+
+                {{-- STEP 1: INFORMASI SISWA --}}
+                <div class="step-panel active" id="panel-1">
+                    <div class="reg-card-header">
+                        <h2><i class="bi bi-person-fill me-2" style="color:#1a6bff;"></i>Informasi Siswa</h2>
+                        <p>Isi data pribadi siswa yang akan mengikuti kursus renang.</p>
+                    </div>
+                    <div class="reg-card-body">
                     <div class="reg-group">
                         <label class="reg-label" for="reg-nama-lengkap">Nama Lengkap <span class="req">*</span></label>
                         <input type="text" id="reg-nama-lengkap" class="reg-input" placeholder="Masukkan nama lengkap siswa" autocomplete="name" />
@@ -402,8 +472,33 @@
                 </div>
             </div>
 
-            {{-- STEP 4: KONFIRMASI --}}
+            {{-- STEP 4: PEMBUATAN AKUN --}}
             <div class="step-panel" id="panel-4">
+                <div class="reg-card-header">
+                    <h2><i class="bi bi-shield-lock-fill me-2" style="color:#1a6bff;"></i>Pembuatan Akun</h2>
+                    <p>Buat email dan password untuk login ke akun siswa Anda.</p>
+                </div>
+                <div class="reg-card-body">
+                    <div class="reg-group">
+                        <label class="reg-label" for="reg-email-login">Email untuk Login <span class="req">*</span></label>
+                        <input type="email" id="reg-email-login" class="reg-input" placeholder="email@contoh.com" autocomplete="email" />
+                        <p class="reg-helper-text">Email ini akan dipakai untuk masuk ke akun Anda setelah diverifikasi.</p>
+                    </div>
+                    <div class="reg-row">
+                        <div class="reg-group" style="margin-bottom:0">
+                            <label class="reg-label" for="reg-password-login">Password <span class="req">*</span></label>
+                            <input type="password" id="reg-password-login" class="reg-input" placeholder="Minimal 8 karakter" autocomplete="new-password" />
+                        </div>
+                        <div class="reg-group" style="margin-bottom:0">
+                            <label class="reg-label" for="reg-password-confirm">Konfirmasi Password <span class="req">*</span></label>
+                            <input type="password" id="reg-password-confirm" class="reg-input" placeholder="Ulangi password" autocomplete="new-password" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- STEP 5: KONFIRMASI --}}
+            <div class="step-panel" id="panel-5">
                 <div class="reg-card-header" id="confirm-header">
                     <h2><i class="bi bi-check2-circle me-2" style="color:#1a6bff;"></i>Konfirmasi Data</h2>
                     <p>Periksa kembali data sebelum mengirimkan pendaftaran.</p>
@@ -414,7 +509,7 @@
                 <div id="reg-success" class="reg-success">
                     <div class="success-icon"><i class="bi bi-check-lg"></i></div>
                     <h2 style="font-weight:800; font-size:22px; margin-bottom:8px; color:#1a1a2e;">Pendaftaran Berhasil!</h2>
-                    <p style="color:#6b7280; margin-bottom:24px;">Data siswa berhasil didaftarkan. Anda akan diarahkan ke halaman login.</p>
+                    <p style="color:#6b7280; margin-bottom:24px;">Akun Anda berhasil dibuat. Silakan masuk dengan email dan password yang Anda pilih.</p>
                     <a href="{{ route('auth.login') }}" style="display:inline-flex; align-items:center; gap:8px; padding:12px 28px; background:linear-gradient(135deg,#1a6bff,#3b82f6); color:#fff; border-radius:10px; font-weight:700; text-decoration:none;">
                         <i class="bi bi-box-arrow-in-right"></i> Ke Halaman Login
                     </a>
@@ -428,10 +523,10 @@
                 </button>
                 <button class="btn-step-next" id="btn-next" type="button">
                     Lanjutkan <i class="bi bi-arrow-right"></i>
-                </button>
             </div>
         </div>
     </div>
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @vite(['resources/js/app.js'])
@@ -454,15 +549,24 @@
             };
 
             function collectPayload() {
+                const isMandiri = document.getElementById('reg-tipe-pendaftar')?.value === 'self';
+                const namaSiswa = document.getElementById('reg-nama-lengkap')?.value?.trim();
+                const waSiswa = document.getElementById('reg-no-whatsapp')?.value?.trim();
+                const emailSiswa = document.getElementById('reg-email-login')?.value?.trim();
+                
                 return {
-                    nama_lengkap: document.getElementById('reg-nama-lengkap')?.value?.trim(),
+                    tipe_pendaftar: isMandiri ? 'self' : 'wali',
+                    nama_lengkap: namaSiswa,
                     nama_panggilan: document.getElementById('reg-nama-panggilan')?.value?.trim(),
                     jenis_kelamin: document.getElementById('reg-jenis-kelamin')?.value,
                     tempat_lahir: document.getElementById('reg-tempat-lahir')?.value?.trim(),
                     tanggal_lahir: document.getElementById('reg-tanggal-lahir')?.value,
-                    no_whatsapp: document.getElementById('reg-no-whatsapp')?.value?.trim(),
-                    nama_wali: document.getElementById('reg-nama-wali')?.value?.trim(),
-                    hubungan_wali: document.getElementById('reg-hubungan-wali')?.value?.trim(),
+                    no_whatsapp: waSiswa,
+                    email: emailSiswa,
+                    password: document.getElementById('reg-password-login')?.value,
+                    password_confirmation: document.getElementById('reg-password-confirm')?.value,
+                    nama_wali: isMandiri ? namaSiswa : document.getElementById('reg-nama-wali')?.value?.trim(),
+                    hubungan_wali: isMandiri ? 'Diri Sendiri' : document.getElementById('reg-hubungan-wali')?.value?.trim(),
                     alamat: document.getElementById('reg-alamat')?.value?.trim(),
                     program: document.getElementById('reg-program')?.value?.trim(),
                     jenis_program: document.getElementById('reg-jenis-program')?.value,
@@ -485,8 +589,27 @@
                 const payload = collectPayload();
 
                 // basic client-side check for required fields
-                if (!payload.nama_lengkap || !payload.jenis_kelamin || !payload.tempat_lahir || !payload.tanggal_lahir || !payload.no_whatsapp || !payload.nama_wali || !payload.hubungan_wali || !payload.alamat) {
-                    fallbackToast('Lengkapi semua data penting terlebih dahulu.', 'danger');
+                if (!payload.nama_lengkap || !payload.jenis_kelamin || !payload.tempat_lahir || !payload.tanggal_lahir || !payload.no_whatsapp || !payload.email || !payload.password || !payload.password_confirmation || !payload.nama_wali || !payload.hubungan_wali || !payload.alamat) {
+                    fallbackToast('Lengkapi semua data penting termasuk email dan password.', 'danger');
+                    isSubmitting = false;
+                    return;
+                }
+
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(payload.email)) {
+                    fallbackToast('Format email tidak valid.', 'danger');
+                    isSubmitting = false;
+                    return;
+                }
+
+                if (payload.password.length < 8) {
+                    fallbackToast('Password minimal 8 karakter.', 'danger');
+                    isSubmitting = false;
+                    return;
+                }
+
+                if (payload.password !== payload.password_confirmation) {
+                    fallbackToast('Konfirmasi password tidak cocok.', 'danger');
                     isSubmitting = false;
                     return;
                 }
@@ -607,10 +730,88 @@
             //  MULTI-STEP WIZARD NAVIGATION
             // ─────────────────────────────────────────────
             let currentStep = 1;
-            const TOTAL_STEPS = 4;
+            const TOTAL_STEPS = 5;
 
             const btnNext = document.getElementById('btn-next');
             const btnBack = document.getElementById('btn-back');
+
+            // Intro Selection Cards Click Event Listeners
+            const cardSelf = document.getElementById('select-card-self');
+            const cardWali = document.getElementById('select-card-wali');
+            
+            if (cardSelf) {
+                cardSelf.addEventListener('click', function () {
+                    document.getElementById('reg-tipe-pendaftar').value = 'self';
+                    document.getElementById('selection-screen').style.display = 'none';
+                    document.getElementById('wizard-form-container').style.display = 'block';
+                    updateTipeUi();
+                    goToStep(1);
+                });
+            }
+
+            if (cardWali) {
+                cardWali.addEventListener('click', function () {
+                    document.getElementById('reg-tipe-pendaftar').value = 'wali';
+                    document.getElementById('selection-screen').style.display = 'none';
+                    document.getElementById('wizard-form-container').style.display = 'block';
+                    updateTipeUi();
+                    goToStep(1);
+                });
+            }
+
+            function renderStepIndicators(isMandiri) {
+                const indicator = document.getElementById('step-indicator');
+                if (!indicator) return;
+                
+                if (isMandiri) {
+                    indicator.innerHTML = `
+                        <div class="step-item active" data-step="1" data-step-label-num="1">
+                            <div class="step-circle" id="sc-1">1</div>
+                            <div class="step-label">Informasi<br>Siswa</div>
+                        </div>
+                        <div class="step-item" data-step="3" data-step-label-num="2">
+                            <div class="step-circle" id="sc-3">2</div>
+                            <div class="step-label">Program &amp;<br>Jadwal</div>
+                        </div>
+                        <div class="step-item" data-step="4" data-step-label-num="3">
+                            <div class="step-circle" id="sc-4">3</div>
+                            <div class="step-label">Buat Akun</div>
+                        </div>
+                        <div class="step-item" data-step="5" data-step-label-num="4">
+                            <div class="step-circle" id="sc-5">4</div>
+                            <div class="step-label">Konfirmasi</div>
+                        </div>
+                    `;
+                } else {
+                    indicator.innerHTML = `
+                        <div class="step-item active" data-step="1" data-step-label-num="1">
+                            <div class="step-circle" id="sc-1">1</div>
+                            <div class="step-label">Informasi<br>Siswa</div>
+                        </div>
+                        <div class="step-item" data-step="2" data-step-label-num="2">
+                            <div class="step-circle" id="sc-2">2</div>
+                            <div class="step-label">Informasi<br>Orang Tua</div>
+                        </div>
+                        <div class="step-item" data-step="3" data-step-label-num="3">
+                            <div class="step-circle" id="sc-3">3</div>
+                            <div class="step-label">Program &amp;<br>Jadwal</div>
+                        </div>
+                        <div class="step-item" data-step="4" data-step-label-num="4">
+                            <div class="step-circle" id="sc-4">4</div>
+                            <div class="step-label">Buat Akun</div>
+                        </div>
+                        <div class="step-item" data-step="5" data-step-label-num="5">
+                            <div class="step-circle" id="sc-5">5</div>
+                            <div class="step-label">Konfirmasi</div>
+                        </div>
+                    `;
+                }
+            }
+
+            function updateTipeUi() {
+                const isMandiri = document.getElementById('reg-tipe-pendaftar').value === 'self';
+                renderStepIndicators(isMandiri);
+            }
 
             function getVal(id) { return document.getElementById(id)?.value?.trim() || ''; }
 
@@ -624,16 +825,43 @@
                     if (!getVal('reg-alamat')) { fallbackToast('Alamat wajib diisi.', 'danger'); return false; }
                 }
                 if (step === 2) {
-                    if (!getVal('reg-nama-wali')) { fallbackToast('Nama orang tua/wali wajib diisi.', 'danger'); return false; }
-                    if (!document.getElementById('reg-hubungan-wali').value) { fallbackToast('Hubungan dengan siswa wajib dipilih.', 'danger'); return false; }
+                    const isMandiri = document.getElementById('reg-tipe-pendaftar').value === 'self';
+                    if (!isMandiri) {
+                        if (!getVal('reg-nama-wali')) { fallbackToast('Nama orang tua/wali wajib diisi.', 'danger'); return false; }
+                        if (!document.getElementById('reg-hubungan-wali').value) { fallbackToast('Hubungan dengan siswa wajib dipilih.', 'danger'); return false; }
+                        if (!getVal('reg-no-hp-wali')) { fallbackToast('Nomor HP orang tua/wali wajib diisi.', 'danger'); return false; }
+                    }
+                }
+                if (step === 4) {
+                    if (!getVal('reg-email-login')) { fallbackToast('Email untuk login wajib diisi.', 'danger'); return false; }
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(getVal('reg-email-login'))) { fallbackToast('Format email tidak valid.', 'danger'); return false; }
+                    if (!getVal('reg-password-login')) { fallbackToast('Password wajib diisi.', 'danger'); return false; }
+                    if (getVal('reg-password-login').length < 8) { fallbackToast('Password minimal 8 karakter.', 'danger'); return false; }
+                    if (getVal('reg-password-login') !== getVal('reg-password-confirm')) { fallbackToast('Konfirmasi password tidak cocok.', 'danger'); return false; }
                 }
                 return true;
             }
 
             function buildConfirmation() {
                 const p = collectPayload();
+                const isMandiri = document.getElementById('reg-tipe-pendaftar').value === 'self';
                 const val = (v) => v ? `<span class="confirm-val">${v}</span>` : `<span class="confirm-val confirm-empty">—</span>`;
                 const genderLabel = p.jenis_kelamin === 'L' ? 'Laki-laki' : (p.jenis_kelamin === 'P' ? 'Perempuan' : '');
+                
+                let waliHtml = '';
+                if (isMandiri) {
+                    waliHtml = `
+                        <div class="confirm-row"><span class="confirm-key">Tipe Pendaftaran</span><span class="confirm-val text-primary fw-600"><i class="bi bi-person-check me-1"></i>Saya sendiri (Siswa Mandiri / Dewasa)</span></div>
+                    `;
+                } else {
+                    waliHtml = `
+                        <div class="confirm-row"><span class="confirm-key">Nama Wali</span>${val(p.nama_wali)}</div>
+                        <div class="confirm-row"><span class="confirm-key">Hubungan</span>${val(p.hubungan_wali)}</div>
+                        <div class="confirm-row"><span class="confirm-key">No. HP Wali</span>${val(p.no_hp_wali || getVal('reg-no-hp-wali'))}</div>
+                    `;
+                }
+
                 document.getElementById('confirm-body').innerHTML = `
                     <div class="confirm-section">
                         <div class="confirm-section-title">Informasi Siswa</div>
@@ -647,8 +875,7 @@
                     </div>
                     <div class="confirm-section">
                         <div class="confirm-section-title">Informasi Orang Tua / Wali</div>
-                        <div class="confirm-row"><span class="confirm-key">Nama Wali</span>${val(p.nama_wali)}</div>
-                        <div class="confirm-row"><span class="confirm-key">Hubungan</span>${val(p.hubungan_wali)}</div>
+                        ${waliHtml}
                     </div>
                     <div class="confirm-section">
                         <div class="confirm-section-title">Program & Jadwal</div>
@@ -658,35 +885,67 @@
                         <div class="confirm-row"><span class="confirm-key">Instagram</span>${val(p.instagram)}</div>
                         <div class="confirm-row"><span class="confirm-key">Catatan</span>${val(p.catatan)}</div>
                     </div>
+                    <div class="confirm-section">
+                        <div class="confirm-section-title">Informasi Akun Login</div>
+                        <div class="confirm-row"><span class="confirm-key">Email Login</span>${val(p.email)}</div>
+                        <div class="confirm-row"><span class="confirm-key">Password</span>${val('Tersimpan aman')}</div>
+                    </div>
                 `;
             }
 
             function goToStep(step) {
-                for (let i = 1; i <= TOTAL_STEPS; i++) {
-                    document.getElementById(`panel-${i}`).classList.remove('active');
-                    const si = document.querySelector(`.step-item[data-step="${i}"]`);
-                    si.classList.remove('active', 'completed');
-                    const sc = document.getElementById(`sc-${i}`);
-                    if (i < step) {
-                        si.classList.add('completed');
-                        sc.innerHTML = '<i class="bi bi-check-lg" style="font-size:16px;"></i>';
-                    } else if (i === step) {
-                        si.classList.add('active');
-                        sc.textContent = i;
-                    } else {
-                        sc.textContent = i;
-                    }
+                const isMandiri = document.getElementById('reg-tipe-pendaftar').value === 'self';
+                const totalStepsNum = isMandiri ? 4 : 5;
+
+                for (let i = 1; i <= 5; i++) {
+                    const panelEl = document.getElementById(`panel-${i}`);
+                    if (panelEl) panelEl.classList.remove('active');
                 }
-                document.getElementById(`panel-${step}`).classList.add('active');
+                const activePanel = document.getElementById(`panel-${step}`);
+                if (activePanel) activePanel.classList.add('active');
+
+                const stepItems = document.querySelectorAll('.step-indicator .step-item');
+                stepItems.forEach(si => {
+                    const targetStep = parseInt(si.getAttribute('data-step'), 10);
+                    si.classList.remove('active', 'completed');
+                    const sc = si.querySelector('.step-circle');
+                    
+                    if (targetStep < step) {
+                        si.classList.add('completed');
+                        if (sc) sc.innerHTML = '<i class="bi bi-check-lg" style="font-size:16px;"></i>';
+                    } else if (targetStep === step) {
+                        si.classList.add('active');
+                        if (sc) sc.textContent = si.getAttribute('data-step-label-num');
+                    } else {
+                        if (sc) sc.textContent = si.getAttribute('data-step-label-num');
+                    }
+                });
 
                 // progress bar
-                document.getElementById('reg-progress').style.width = ((step / TOTAL_STEPS) * 100) + '%';
+                let stepIndex = 1;
+                if (isMandiri) {
+                    if (step === 3) stepIndex = 2;
+                    else if (step === 4) stepIndex = 3;
+                    else if (step === 5) stepIndex = 4;
+                } else {
+                    stepIndex = step;
+                }
+                const progressFill = document.getElementById('reg-progress');
+                if (progressFill) {
+                    progressFill.style.width = ((stepIndex / totalStepsNum) * 100) + '%';
+                }
 
-                // back button visibility
-                btnBack.classList.toggle('hidden', step === 1);
+                // back button text/visibility
+                if (step === 1) {
+                    btnBack.innerHTML = '<i class="bi bi-arrow-left"></i> Ganti Tipe';
+                    btnBack.classList.remove('hidden');
+                } else {
+                    btnBack.innerHTML = '<i class="bi bi-arrow-left"></i> Kembali';
+                    btnBack.classList.remove('hidden');
+                }
 
                 // next button label
-                if (step === TOTAL_STEPS) {
+                if (step === 5) {
                     btnNext.innerHTML = 'Kirim Pendaftaran <i class="bi bi-send ms-1"></i>';
                     buildConfirmation();
                 } else {
@@ -698,9 +957,14 @@
             }
 
             btnNext.addEventListener('click', function () {
+                const isMandiri = document.getElementById('reg-tipe-pendaftar').value === 'self';
                 if (currentStep < TOTAL_STEPS) {
                     if (!validateStep(currentStep)) return;
-                    goToStep(currentStep + 1);
+                    let next = currentStep + 1;
+                    if (currentStep === 1 && isMandiri) {
+                        next = 3;
+                    }
+                    goToStep(next);
                 } else {
                     // Final step: submit
                     submitRegistration(this);
@@ -708,7 +972,18 @@
             });
 
             btnBack.addEventListener('click', function () {
-                if (currentStep > 1) goToStep(currentStep - 1);
+                if (currentStep === 1) {
+                    // Go back to the selection screen
+                    document.getElementById('wizard-form-container').style.display = 'none';
+                    document.getElementById('selection-screen').style.display = 'block';
+                } else {
+                    const isMandiri = document.getElementById('reg-tipe-pendaftar').value === 'self';
+                    let prev = currentStep - 1;
+                    if (currentStep === 3 && isMandiri) {
+                        prev = 1;
+                    }
+                    goToStep(prev);
+                }
             });
 
         })();

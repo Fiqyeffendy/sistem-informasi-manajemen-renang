@@ -1,3 +1,4 @@
+{{-- Halaman login untuk masuk ke sistem dengan role admin, pelatih, atau siswa. --}}
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -424,10 +425,23 @@
 
             <div class="auth-form-header">
                 <h2>Selamat datang kembali</h2>
-                <p>Masuk ke akun administrator Anda</p>
+                <p>Masuk ke akun SIMPEL-Fella untuk mengakses dashboard Anda.</p>
             </div>
 
-            <form id="form-login" novalidate>
+            @if (session('status'))
+                <div class="alert-success" style="margin-bottom:1rem; padding:0.8rem 1rem; border-radius:10px; background:#ecfdf3; color:#047857; border:1px solid #a7f3d0; font-size:0.9rem;">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert-danger" style="margin-bottom:1rem; padding:0.8rem 1rem; border-radius:10px; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; font-size:0.9rem;">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form id="form-login" method="POST" action="{{ route('auth.login') }}" novalidate>
+                @csrf
                 <!-- Email -->
                 <div class="form-group">
                     <label for="inp-email">Email</label>
@@ -519,20 +533,15 @@
         });
     }
 
-    // Login form submit handler (demo: navigate to dashboard)
+    // Let the form submit to Laravel directly.
     const form = document.getElementById('form-login');
     if (form) {
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-
+        form.addEventListener('submit', function () {
             const btn = document.getElementById('btn-login');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-arrow-repeat" style="animation:spin 0.8s linear infinite;display:inline-block;"></i> Memuat...';
-
-            // Simulate login — redirect to admin dashboard
-            setTimeout(function () {
-                window.location.href = '{{ route("admin.dashboard") }}';
-            }, 900);
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="bi bi-arrow-repeat" style="animation:spin 0.8s linear infinite;display:inline-block;"></i> Memuat...';
+            }
         });
     }
 

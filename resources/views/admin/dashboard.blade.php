@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+{{-- Dashboard admin menampilkan ringkasan data, pendaftaran, dan statistik kehadiran hari ini. --}}
 <style>
     /* ── Dashboard Layout & Spacing ── */
     .dash-header-section {
@@ -225,7 +226,7 @@
 
 <div id="dashboard-admin" class="section fade-in">
 
-    <!-- Header Section -->
+    {{-- Header halaman berisi sapaan admin dan tombol aksi cepat. --}}
     <div class="dash-header-section">
         <div class="dash-greeting-wrap">
             <h2 id="welcome-greeting">Selamat pagi, Admin 👏</h2>
@@ -241,122 +242,89 @@
         </div>
     </div>
 
-    <!-- 4 KPI Cards -->
+    {{-- Empat kartu KPI ringkas untuk melihat status utama sistem. --}}
     <div class="stat-grid">
-        <!-- Card 1 -->
+        {{-- Kartu jumlah siswa aktif yang terdaftar. --}}
         <div class="stat-box">
             <div class="stat-box-top">
                 <div class="stat-box-icon siswa-icon"><i class="bi bi-people"></i></div>
-                <span class="badge badge-success" style="font-size:0.68rem; padding:0.25rem 0.5rem;">+ 12% bulan ini</span>
+                <span class="badge badge-success" style="font-size:0.68rem; padding:0.25rem 0.5rem;">Siswa</span>
             </div>
-            <div class="stat-box-value" id="stat-siswa-val">47</div>
+            <div class="stat-box-value" id="stat-siswa-val">{{ $totalSiswa }}</div>
             <p class="stat-box-label">Total Siswa Aktif</p>
         </div>
-        <!-- Card 2 -->
+        {{-- Kartu jumlah kelas yang sedang berjalan. --}}
         <div class="stat-box">
             <div class="stat-box-top">
                 <div class="stat-box-icon kelas-icon"><i class="bi bi-calendar-check"></i></div>
-                <span class="badge badge-success" style="font-size:0.68rem; padding:0.25rem 0.5rem;">+ 1 kelas baru</span>
+                <span class="badge badge-success" style="font-size:0.68rem; padding:0.25rem 0.5rem;">Aktif</span>
             </div>
-            <div class="stat-box-value" id="stat-kelas-val">5</div>
+            <div class="stat-box-value" id="stat-kelas-val">{{ $activeKelas }}</div>
             <p class="stat-box-label">Kelas Berjalan</p>
         </div>
-        <!-- Card 3 -->
+        {{-- Kartu jumlah pelatih aktif. --}}
         <div class="stat-box">
             <div class="stat-box-top">
                 <div class="stat-box-icon pelatih-icon"><i class="bi bi-person-badge"></i></div>
-                <span class="badge badge-success" style="font-size:0.68rem; padding:0.25rem 0.5rem;">+ sama</span>
+                <span class="badge badge-success" style="font-size:0.68rem; padding:0.25rem 0.5rem;">Pelatih</span>
             </div>
-            <div class="stat-box-value" id="stat-pelatih-val">4</div>
+            <div class="stat-box-value" id="stat-pelatih-val">{{ $totalPelatih }}</div>
             <p class="stat-box-label">Pelatih Aktif</p>
         </div>
-        <!-- Card 4 -->
+        {{-- Kartu jumlah kehadiran hari ini. --}}
         <div class="stat-box">
             <div class="stat-box-top">
                 <div class="stat-box-icon hadir-icon"><i class="bi bi-clipboard2-check"></i></div>
-                <span class="badge badge-alpha" style="font-size:0.68rem; padding:0.25rem 0.5rem;">↓ 3 absen</span>
+                <span class="badge badge-alpha" style="font-size:0.68rem; padding:0.25rem 0.5rem;">Presensi</span>
             </div>
-            <div class="stat-box-value" id="stat-kehadiran-val">23</div>
+            <div class="stat-box-value" id="stat-kehadiran-val">{{ $todayPresensiCount }}</div>
             <p class="stat-box-label">Kehadiran Hari Ini</p>
         </div>
     </div>
 
-    <!-- Row 2: Jadwal Hari Ini & Tren Kehadiran -->
+    {{-- Bagian jadwal hari ini dan tren kehadiran dalam bentuk kartu. --}}
     <div class="row g-3 mb-4">
-        <!-- Left: Jadwal Hari Ini -->
+        {{-- Daftar jadwal yang berlangsung hari ini. --}}
         <div class="col-lg-6">
             <div class="card-custom h-100">
                 <div class="card-header">
                     <div>
                         <span class="fw-700" style="font-size: 0.95rem;">Jadwal Hari Ini</span>
-                        <div class="text-muted" style="font-size: 0.77rem; font-weight: 500; margin-top: 0.125rem;" id="dash-date-sub">Sabtu, 29 Juni 2024</div>
+                        <div class="text-muted" style="font-size: 0.77rem; font-weight: 500; margin-top: 0.125rem;" id="dash-date-sub">{{ $todayIndonesian }}, {{ now()->translatedFormat('d F Y') }}</div>
                     </div>
-                    <span class="badge badge-info" id="dash-total-sesi-badge">5 Sesi</span>
+                    <span class="badge badge-info" id="dash-total-sesi-badge">{{ $todayJadwals->count() }} Sesi</span>
                 </div>
                 <div class="card-body">
                     <div class="sched-list" id="dash-sched-container">
-                        <!-- Sesi 1 -->
-                        <div class="sched-box">
-                            <div class="sched-time-col">06:00</div>
-                            <div class="sched-info-col">
-                                <div class="sched-title">Advanced Morning</div>
-                                <div class="sched-sub">Coach Rini . Pool A</div>
+                        @if($todayJadwals->isEmpty())
+                            <div class="text-center py-5 text-muted small">
+                                <i class="bi bi-calendar-x fs-3 d-block opacity-40 mb-2"></i>
+                                Tidak ada jadwal hari ini ({{ $todayIndonesian }}).
                             </div>
-                            <div class="sched-badge-col">
-                                <span class="label-siswa">4 siswa</span>
-                            </div>
-                        </div>
-                        <!-- Sesi 2 -->
-                        <div class="sched-box">
-                            <div class="sched-time-col">07:00</div>
-                            <div class="sched-info-col">
-                                <div class="sched-title">Beginner Morning A</div>
-                                <div class="sched-sub">Coach Budi . Pool A</div>
-                            </div>
-                            <div class="sched-badge-col">
-                                <span class="label-siswa">6 siswa</span>
-                            </div>
-                        </div>
-                        <!-- Sesi 3 (Active Highlighted) -->
-                        <div class="sched-box active">
-                            <div class="sched-time-col" style="color:var(--success);">09:00</div>
-                            <div class="sched-info-col">
-                                <div class="sched-title" style="color:#14532d;">Junior Saturday</div>
-                                <div class="sched-sub" style="color:#166534;">Coach Budi . Pool B</div>
-                            </div>
-                            <div class="sched-badge-col">
-                                <span class="label-siswa" style="color:#166534; display:block; margin-bottom: 2px;">7 siswa</span>
-                                <span class="badge badge-hadir" style="padding:0.2rem 0.5rem; font-size:0.65rem;">Berlangsung</span>
-                            </div>
-                        </div>
-                        <!-- Sesi 4 -->
-                        <div class="sched-box">
-                            <div class="sched-time-col">15:00</div>
-                            <div class="sched-info-col">
-                                <div class="sched-title">Intermediate Afternoon</div>
-                                <div class="sched-sub">Coach Ani . Pool B</div>
-                            </div>
-                            <div class="sched-badge-col">
-                                <span class="label-siswa">5 siswa</span>
-                            </div>
-                        </div>
-                        <!-- Sesi 5 -->
-                        <div class="sched-box">
-                            <div class="sched-time-col">17:00</div>
-                            <div class="sched-info-col">
-                                <div class="sched-title">Beginner Evening B</div>
-                                <div class="sched-sub">Coach Dian . Pool C</div>
-                            </div>
-                            <div class="sched-badge-col">
-                                <span class="label-siswa">3 siswa</span>
-                            </div>
-                        </div>
+                        @else
+                            {{-- Tampilkan tiap jadwal sebagai baris yang ringkas dan mudah dibaca. --}}
+                            @foreach($todayJadwals as $jadwal)
+                                <div class="sched-box">
+                                    <div class="sched-time-col">{{ \Carbon\Carbon::parse($jadwal->jam)->format('H:i') }}</div>
+                                    <div class="sched-info-col">
+                                        @php
+                                            $progVal = $jadwal->siswa?->program instanceof \App\Enums\Program ? $jadwal->siswa?->program->value : (string) $jadwal->siswa?->program;
+                                        @endphp
+                                        <div class="sched-title">{{ explode(' (', $progVal)[0] }}</div>
+                                        <div class="sched-sub">Coach {{ $jadwal->pelatih?->nama }} . {{ $jadwal->lokasi }}</div>
+                                    </div>
+                                    <div class="sched-badge-col">
+                                        <span class="label-siswa">{{ $jadwal->siswa?->nama }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Right: Tren Kehadiran -->
+        {{-- Grafik tren kehadiran selama beberapa minggu terakhir. --}}
         <div class="col-lg-6">
             <div class="card-custom h-100">
                 <div class="card-header">
@@ -394,36 +362,33 @@
                                 </linearGradient>
                             </defs>
                             
-                            <!-- Filled Area path -->
-                            <path d="M 40 100 Q 100 80 160 90 T 280 85 T 400 70 T 480 75 L 480 160 L 40 160 Z" fill="url(#chart-fill-grad)" />
+                            <path d="{{ $areaD }}" fill="url(#chart-fill-grad)" />
 
-                            <!-- Curve Line -->
-                            <path d="M 40 100 Q 100 80 160 90 T 280 85 T 400 70 T 480 75" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" />
+                            <path d="{{ $pathD }}" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" />
 
-                            <!-- Interactive Dots -->
-                            <circle cx="400" cy="70" r="4.5" fill="#fff" stroke="#2563eb" stroke-width="2.5" />
-                            <circle cx="480" cy="75" r="4.5" fill="#fff" stroke="#2563eb" stroke-width="2.5" />
+                            @foreach($weeksData as $index => $value)
+                                @php
+                                    $x = 40 + ($index * 60);
+                                    $y = 160 - min(120, $value * 2);
+                                @endphp
+                                <circle cx="{{ $x }}" cy="{{ $y }}" r="4.5" fill="#fff" stroke="#2563eb" stroke-width="2.5" />
+                            @endforeach
                         </svg>
                     </div>
                     <!-- X labels -->
                     <div class="d-flex justify-content-between px-4 pt-2 text-muted fw-600" style="font-size: 0.72rem; letter-spacing: 0.2px;">
-                        <span>W1 May</span>
-                        <span>W2 May</span>
-                        <span>W3 May</span>
-                        <span>W4 May</span>
-                        <span>W1 Jun</span>
-                        <span>W2 Jun</span>
-                        <span>W3 Jun</span>
-                        <span>W4 Jun</span>
+                        @foreach($weeksLabel as $label)
+                             <span>{{ $label }}</span>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Row 3: Status Pelatih, Sesi per Hari & Aksi Cepat -->
+    {{-- Bagian status pelatih, distribusi sesi, dan aksi cepat admin. --}}
     <div class="row g-3 mb-4">
-        <!-- Status Pelatih -->
+        {{-- Status ketersediaan pelatih hari ini. --}}
         <div class="col-lg-4">
             <div class="card-custom h-100">
                 <div class="card-header">
@@ -433,51 +398,37 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="coach-row">
-                        <div class="coach-left-info">
-                            <div class="coach-initials-avatar">BH</div>
-                            <div>
-                                <span class="coach-name">Budi Hartono</span>
-                                <span class="coach-subtext">12 siswa . 24 sesi</span>
-                            </div>
+                    @if($coaches->isEmpty())
+                        <div class="text-center text-muted py-5 small">
+                            <i class="bi bi-person-badge fs-2 d-block opacity-40 mb-2"></i>
+                            Belum ada pelatih terdaftar.
                         </div>
-                        <span class="badge badge-hadir" style="font-size:0.68rem; padding:0.25rem 0.5rem;">Available</span>
-                    </div>
-                    <div class="coach-row">
-                        <div class="coach-left-info">
-                            <div class="coach-initials-avatar">AS</div>
-                            <div>
-                                <span class="coach-name">Ani Susanti</span>
-                                <span class="coach-subtext">9 siswa . 18 sesi</span>
+                    @else
+                        {{-- Tampilkan tiap pelatih dengan jumlah siswa dan sesi aktif. --}}
+                        @foreach($coaches as $coach)
+                            @php
+                                $words = explode(' ', $coach->nama);
+                                $initials = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ''));
+                                $statusClass = $coach->status === 'aktif' ? 'badge-hadir' : 'badge-info';
+                                $statusText = $coach->status === 'aktif' ? 'Available' : 'On Leave';
+                            @endphp
+                            <div class="coach-row">
+                                <div class="coach-left-info">
+                                    <div class="coach-initials-avatar">{{ $initials }}</div>
+                                    <div>
+                                        <span class="coach-name">{{ $coach->nama }}</span>
+                                        <span class="coach-subtext">{{ $coach->total_siswa }} siswa . {{ $coach->total_sesi }} sesi</span>
+                                    </div>
+                                </div>
+                                <span class="badge {{ $statusClass }}" style="font-size:0.68rem; padding:0.25rem 0.5rem;">{{ $statusText }}</span>
                             </div>
-                        </div>
-                        <span class="badge badge-hadir" style="font-size:0.68rem; padding:0.25rem 0.5rem;">Available</span>
-                    </div>
-                    <div class="coach-row">
-                        <div class="coach-left-info">
-                            <div class="coach-initials-avatar">RW</div>
-                            <div>
-                                <span class="coach-name">Rini Wulandari</span>
-                                <span class="coach-subtext">7 siswa . 14 sesi</span>
-                            </div>
-                        </div>
-                        <span class="badge badge-izin" style="font-size:0.68rem; padding:0.25rem 0.5rem;">Busy</span>
-                    </div>
-                    <div class="coach-row">
-                        <div class="coach-left-info">
-                            <div class="coach-initials-avatar">DP</div>
-                            <div>
-                                <span class="coach-name">Dian Pratomo</span>
-                                <span class="coach-subtext">5 siswa . 10 sesi</span>
-                            </div>
-                        </div>
-                        <span class="badge badge-info" style="font-size:0.68rem; padding:0.25rem 0.5rem; background:#f1f5f9; color:#475569; border-color:#e2e8f0;">On Leave</span>
-                    </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
         </div>
 
-        <!-- Sesi per Hari Chart -->
+        {{-- Grafik distribusi sesi per hari untuk minggu ini. --}}
         <div class="col-lg-4">
             <div class="card-custom h-100">
                 <div class="card-header">
@@ -504,20 +455,29 @@
                             <text x="0" y="136" fill="#94a3b8" font-size="8" font-weight="600">0</text>
 
                             <!-- Rounded Columns Bars -->
-                            <!-- Mon (value 6 -> height 90) -->
-                            <rect x="40" y="50" width="14" height="60" rx="4" fill="#2563eb" />
-                            <!-- Tue (value 4 -> height 60) -->
-                            <rect x="78" y="70" width="14" height="40" rx="4" fill="#2563eb" />
-                            <!-- Wed (value 6.5 -> height 97) -->
-                            <rect x="116" y="42" width="14" height="68" rx="4" fill="#2563eb" />
-                            <!-- Thu (value 5 -> height 75) -->
-                            <rect x="154" y="60" width="14" height="50" rx="4" fill="#2563eb" />
-                            <!-- Fri (value 6 -> height 90) -->
-                            <rect x="192" y="50" width="14" height="60" rx="4" fill="#2563eb" />
-                            <!-- Sat (value 8 -> height 120) -->
-                            <rect x="230" y="20" width="14" height="90" rx="4" fill="#2563eb" />
-                            <!-- Sun (value 2.5 -> height 37) -->
-                            <rect x="268" y="92" width="14" height="18" rx="4" fill="#2563eb" />
+                            @php
+                                $xCoords = [
+                                    'Senin' => 40,
+                                    'Selasa' => 78,
+                                    'Rabu' => 116,
+                                    'Kamis' => 154,
+                                    'Jumat' => 192,
+                                    'Sabtu' => 230,
+                                    'Minggu' => 268
+                                ];
+                            @endphp
+                            @foreach($sesiChartData as $day => $count)
+                                @php
+                                    $height = min(90, $count * 10);
+                                    $y = 110 - $height;
+                                    $x = $xCoords[$day];
+                                @endphp
+                                @if($height > 0)
+                                    <rect x="{{ $x }}" y="{{ $y }}" width="14" height="{{ $height }}" rx="4" fill="#2563eb" />
+                                @else
+                                    <rect x="{{ $x }}" y="108" width="14" height="2" rx="1" fill="#e2e8f0" />
+                                @endif
+                            @endforeach
                         </svg>
                     </div>
                     <!-- X labels -->
@@ -534,7 +494,7 @@
             </div>
         </div>
 
-        <!-- Aksi Cepat -->
+        {{-- Tombol navigasi cepat untuk tindakan rutin admin. --}}
         <div class="col-lg-4">
             <div class="card-custom h-100">
                 <div class="card-header">
@@ -574,7 +534,7 @@
         </div>
     </div>
 
-    <!-- Row 4: Pendaftaran Terbaru Table -->
+    {{-- Tabel daftar pendaftaran terbaru yang perlu dipantau. --}}
     <div class="card-custom mb-4 fade-in">
         <div class="card-header">
             <div>
@@ -595,58 +555,35 @@
                     </tr>
                 </thead>
                 <tbody id="dash-latest-pendaftaran-tbody">
-                    <!-- Row 1 -->
-                    <tr>
-                        <td>
-                            <div class="cell-name">
-                                <div class="cell-avatar">F</div>
-                                <div class="cell-name-text">Fajar Nugroho</div>
-                            </div>
-                        </td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">Beginner</span></td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">Budi Hartono</span></td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">01 Apr 2024</span></td>
-                        <td><span class="badge badge-hadir px-2.5">Active</span></td>
-                    </tr>
-                    <!-- Row 2 -->
-                    <tr>
-                        <td>
-                            <div class="cell-name">
-                                <div class="cell-avatar">A</div>
-                                <div class="cell-name-text">Ahmad Fauzi</div>
-                            </div>
-                        </td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">Intermediate</span></td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">Ani Susanti</span></td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">01 Mar 2024</span></td>
-                        <td><span class="badge badge-hadir px-2.5">Active</span></td>
-                    </tr>
-                    <!-- Row 3 -->
-                    <tr>
-                        <td>
-                            <div class="cell-name">
-                                <div class="cell-avatar">N</div>
-                                <div class="cell-name-text">Nur Aini</div>
-                            </div>
-                        </td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">Intermediate</span></td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">Rini Wulandari</span></td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">14 Feb 2024</span></td>
-                        <td><span class="badge badge-hadir px-2.5">Active</span></td>
-                    </tr>
-                    <!-- Row 4 -->
-                    <tr>
-                        <td>
-                            <div class="cell-name">
-                                <div class="cell-avatar">S</div>
-                                <div class="cell-name-text">Siti Rahayu</div>
-                            </div>
-                        </td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">Intermediate</span></td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">Ani Susanti</span></td>
-                        <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">03 Feb 2024</span></td>
-                        <td><span class="badge badge-hadir px-2.5">Active</span></td>
-                    </tr>
+                    @if($latestPendaftarans->isEmpty())
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-5">
+                                <i class="bi bi-person-x fs-2 d-block opacity-40 mb-2"></i>
+                                Belum ada data pendaftaran terbaru.
+                            </td>
+                        </tr>
+                    @else
+                        {{-- Tampilkan pendaftaran terakhir dengan statusnya. --}}
+                        @foreach($latestPendaftarans as $pendaftaran)
+                            @php
+                                $avatarChar = strtoupper(substr($pendaftaran->nama_lengkap, 0, 1));
+                                $statusClass = $pendaftaran->status === 'aktif' || $pendaftaran->status === 'diterima' ? 'badge-hadir' : 'badge-izin';
+                                $statusText = ucfirst($pendaftaran->status);
+                            @endphp
+                            <tr>
+                                <td>
+                                    <div class="cell-name">
+                                        <div class="cell-avatar">{{ $avatarChar }}</div>
+                                        <div class="cell-name-text">{{ $pendaftaran->nama_lengkap }}</div>
+                                    </div>
+                                </td>
+                                <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">{{ explode(' (', $pendaftaran->program)[0] }}</span></td>
+                                <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">{{ $pendaftaran->nama_wali ?: 'Diri Sendiri' }}</span></td>
+                                <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">{{ \Carbon\Carbon::parse($pendaftaran->tanggal_daftar)->translatedFormat('d M Y') }}</span></td>
+                                <td><span class="badge {{ $statusClass }} px-2.5">{{ $statusText }}</span></td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -654,6 +591,7 @@
 
 </div>
 
+{{-- Script sederhana untuk mengisi sapaan dan tanggal secara dinamis. --}}
 <script>
 (function () {
     // Set greeting dynamically
@@ -668,92 +606,6 @@
     
     const subtextEl = document.getElementById('welcome-subtext');
     if (subtextEl) subtextEl.textContent = dateFormatted + ' . Berikut ringkasan aktivitas hari ini';
-
-    const dateSubEl = document.getElementById('dash-date-sub');
-    if (dateSubEl) dateSubEl.textContent = dateFormatted;
-
-    // Async Fetch dynamic stats from database to populate KPI metrics
-    async function loadDashStats() {
-        try {
-            const [siswaRes, pelatihRes, jadwalRes, presensiRes, pendaftaranRes] = await Promise.all([
-                fetch('/api/siswa'),
-                fetch('/api/pelatih'),
-                fetch('/api/jadwal'),
-                fetch('/api/presensi'),
-                fetch('/api/pendaftaran')
-            ]);
-
-            if (siswaRes.ok) {
-                const data = await siswaRes.json();
-                const count = Array.isArray(data) ? data.length : 0;
-                const el = document.getElementById('stat-siswa-val');
-                if (el && count > 0) el.textContent = count;
-            }
-
-            if (pelatihRes.ok) {
-                const data = await pelatihRes.json();
-                const count = Array.isArray(data) ? data.length : 0;
-                const el = document.getElementById('stat-pelatih-val');
-                if (el && count > 0) el.textContent = count;
-            }
-
-            if (jadwalRes.ok) {
-                const data = await jadwalRes.json();
-                const count = Array.isArray(data) ? data.length : 0;
-                
-                // filter active classes
-                const activeCount = Array.isArray(data) ? data.filter(j => j.status === 'aktif' || j.status === 'Aktif').length : 0;
-                const elKelas = document.getElementById('stat-kelas-val');
-                if (elKelas && activeCount > 0) elKelas.textContent = activeCount;
-
-                const elTotalSesi = document.getElementById('dash-total-sesi-badge');
-                if (elTotalSesi && count > 0) elTotalSesi.textContent = `${count} Sesi`;
-            }
-
-            // Fill pendaftaran table if API responds
-            if (pendaftaranRes.ok) {
-                const data = await pendaftaranRes.json();
-                const items = Array.isArray(data) ? data.slice(0, 4) : [];
-                if (items.length > 0) {
-                    const tbody = document.getElementById('dash-latest-pendaftaran-tbody');
-                    tbody.innerHTML = items.map(item => {
-                        const avatarChar = item.nama_lengkap ? item.nama_lengkap.charAt(0).toUpperCase() : 'S';
-                        const statusClass = item.status === 'aktif' || item.status === 'Active' || item.status === 'diterima' ? 'badge-hadir' : 'badge-izin';
-                        const statusText = item.status ? (item.status.charAt(0).toUpperCase() + item.status.slice(1)) : 'Active';
-                        
-                        // Parse date
-                        let regDateStr = 'Baru';
-                        if (item.created_at) {
-                            try {
-                                const d = new Date(item.created_at);
-                                regDateStr = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
-                            } catch(e) {}
-                        }
-
-                        return `
-                            <tr>
-                                <td>
-                                    <div class="cell-name">
-                                        <div class="cell-avatar">${avatarChar}</div>
-                                        <div class="cell-name-text">${item.nama_lengkap || 'Siswa'}</div>
-                                    </div>
-                                </td>
-                                <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">${item.program || 'Beginner'}</span></td>
-                                <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">${item.nama_orang_tua || 'Budi Hartono'}</span></td>
-                                <td><span style="font-weight: 500; font-size: 0.855rem; color: var(--text-secondary);">${regDateStr}</span></td>
-                                <td><span class="badge ${statusClass} px-2.5">${statusText}</span></td>
-                            </tr>
-                        `;
-                    }).join('');
-                }
-            }
-
-        } catch (e) {
-            console.error('Failed to load dynamic stats', e);
-        }
-    }
-
-    loadDashStats();
 })();
 </script>
 @endsection

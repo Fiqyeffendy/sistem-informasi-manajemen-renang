@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Tabel pelatih menyimpan profil instruktur dan jadwal mengajar mereka.
     public function up(): void
     {
         Schema::create('pelatih', function (Blueprint $table) {

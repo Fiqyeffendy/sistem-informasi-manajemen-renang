@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Siswa extends Model
 {
+    // Model ini mewakili data siswa yang menjadi pusat utama pada sistem ini.
     protected $table = 'siswa';
 
     protected $keyType = 'string';

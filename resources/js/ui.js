@@ -3,6 +3,7 @@
 // ═══════════════════════════════════
 
 (function () {
+  // Utility UI untuk menampilkan toast, modal, dan alur hapus yang umum dipakai.
   /**
    * Show a Bootstrap toast notification.
    * @param {string} msg   – message text
@@ -32,7 +33,8 @@
     new window.bootstrap.Modal(modalEl).show();
   }
 
-  // ===== Delete flow (demo-ready) =====
+  // Alur konfirmasi hapus untuk berbagai entitas.
+
   // Catatan: Karena saat ini tidak ada backend/API, kita simpan state delete
   // dan saat tombol "Hapus" ditekan, minimal tampilkan toast + tutup modal.
   // Hook ini siap di-extend ke fetch/delete API.
@@ -127,7 +129,8 @@
     _hapusState = { type: null, id: null };
   }
 
-  // ===== Demo integration: simpan presensi dari form pelatih =====
+  // Demo sederhana untuk menyimpan presensi dari form pelatih.
+
   // Dipakai oleh button “Simpan Presensi” di tab #input-presensi.
   function savePresensi() {
     const siswaSel = document.getElementById('input-presensi-siswa');

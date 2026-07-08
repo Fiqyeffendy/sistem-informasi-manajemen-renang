@@ -14,6 +14,7 @@ use Illuminate\Notifications\Notifiable;
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
+    // Model ini mewakili akun pengguna yang bisa memiliki role admin, pelatih, atau siswa.
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
@@ -30,13 +31,13 @@ class User extends Authenticatable
         ];
     }
 
-    // Role helpers
+    // Helper sederhana untuk mengecek role pengguna.
     public function hasRole(string $role): bool
     {
         return $this->role === $role;
     }
 
-    // Relationships
+    // Relasi ke model Pelatih jika akun ini milik pelatih.
     public function pelatih()
     {
         return $this->belongsTo(Pelatih::class, 'pelatih_id');

@@ -2,7 +2,7 @@
 
 @section('content')
 
-{{-- Page Header --}}
+{{-- Header halaman dengan judul dan tombol tambah pelatih. --}}
 <div class="page-header fade-in d-flex justify-content-between align-items-center flex-wrap gap-2">
   <div>
     <h1>Data Pelatih</h1>
@@ -18,9 +18,10 @@
   </div>
 </div>
 
-{{-- Table Card --}}
+{{-- Daftar pelatih dalam bentuk tabel dengan pencarian dan status. --}}
 <div class="card-custom fade-in">
-  {{-- Toolbar --}}
+  {{-- Toolbar pencarian dan informasi jumlah data pelatih. --}}
+
   <div class="card-body py-3 border-bottom">
     <div class="table-toolbar">
       <div class="table-toolbar-left" style="gap:8px;">
@@ -38,7 +39,7 @@
     </div>
   </div>
 
-  {{-- Table --}}
+  {{-- Kolom data pelatih yang diisi secara dinamis. --}}
   <div class="table-responsive">
     <table class="table table-custom table-hover mb-0">
       <thead>
@@ -59,7 +60,7 @@
     </table>
   </div>
 
-  {{-- Pagination Wrap --}}
+  {{-- Navigasi halaman untuk daftar pelatih. --}}
   <div class="pagination-wrap">
     <span class="pagination-info" id="pelatih-page-summary">Menampilkan 0-0 dari 0 data</span>
     <nav>

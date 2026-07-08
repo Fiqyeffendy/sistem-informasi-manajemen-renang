@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Jadwal extends Model
 {
+    // Model ini mewakili jadwal latihan yang menghubungkan siswa, pelatih, dan presensi.
     protected $table = 'jadwal';
 
     protected $fillable = [

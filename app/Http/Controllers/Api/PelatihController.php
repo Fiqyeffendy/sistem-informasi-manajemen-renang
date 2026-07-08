@@ -9,13 +9,15 @@ use Illuminate\Validation\Rule;
 
 class PelatihController extends Controller
 {
-    // GET /api/pelatih - Ambil semua pelatih
+    // GET /api/pelatih - Ambil semua pelatih.
+    // Mengurutkan hasil berdasarkan nama.
     public function index()
     {
         return response()->json(Pelatih::orderBy('nama', 'asc')->get(), 200);
     }
 
-    // POST /api/pelatih - Tambah pelatih baru
+    // POST /api/pelatih - Tambah pelatih baru.
+    // Validasi data input dan simpan ke tabel pelatih.
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -35,13 +37,13 @@ class PelatihController extends Controller
         return response()->json($pelatih, 201);
     }
 
-    // GET /api/pelatih/{id} - Ambil 1 pelatih
+    // GET /api/pelatih/{id} - Ambil detail satu pelatih.
     public function show(Pelatih $pelatih)
     {
         return response()->json($pelatih, 200);
     }
 
-    // PUT /api/pelatih/{id} - Update data pelatih
+    // PUT /api/pelatih/{id} - Update data pelatih.
     public function update(Request $request, Pelatih $pelatih)
     {
         $validated = $request->validate([
@@ -62,7 +64,6 @@ class PelatihController extends Controller
             'alasan_cuti'       => 'required_if:status,cuti|nullable|string',
         ]);
 
-        // Reset alasan_cuti jika status diubah kembali ke aktif
         if (isset($validated['status']) && $validated['status'] === 'aktif') {
             $validated['alasan_cuti'] = null;
         }
@@ -71,7 +72,7 @@ class PelatihController extends Controller
         return response()->json($pelatih, 200);
     }
 
-    // DELETE /api/pelatih/{id} - Hapus pelatih
+    // DELETE /api/pelatih/{id} - Hapus pelatih.
     public function destroy(Pelatih $pelatih)
     {
         $pelatih->delete();

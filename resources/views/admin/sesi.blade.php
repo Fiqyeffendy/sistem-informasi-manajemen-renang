@@ -1,41 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
+{{-- Halaman ini menampilkan sisa sesi siswa dan rekap sesi minggu ini. --}}
 <div class="row g-3 mb-2">
   <div class="col-12 col-lg-5">
     <div class="card-custom h-100">
       <div class="card-header">
         <i class="bi bi-hourglass-split me-2 text-primary"></i>Sesi Latihan Tersisa
       </div>
-      <div class="card-body p-3">
-        <div class="mb-3">
-          <div class="d-flex justify-content-between mb-1">
-            <span class="fw-600" style="font-size:.87rem;">Rafi Pratama</span>
-            <span class="badge badge-sisa-low px-2">2 sesi</span>
-          </div>
-          <div class="sesi-bar"><div class="fill fill-low" style="width:10%"></div></div>
-        </div>
-        <div class="mb-3">
-          <div class="d-flex justify-content-between mb-1">
-            <span style="font-size:.87rem;">Nadia Kusuma</span>
-            <span class="badge badge-sisa-warn px-2">4 sesi</span>
-          </div>
-          <div class="sesi-bar"><div class="fill fill-warn" style="width:20%"></div></div>
-        </div>
-        <div class="mb-3">
-          <div class="d-flex justify-content-between mb-1">
-            <span style="font-size:.87rem;">Bagas Wirawan</span>
-            <span class="badge badge-sisa-warn px-2">5 sesi</span>
-          </div>
-          <div class="sesi-bar"><div class="fill fill-warn" style="width:25%"></div></div>
-        </div>
-        <div class="mb-2">
-          <div class="d-flex justify-content-between mb-1">
-            <span style="font-size:.87rem;">Citra Dewi</span>
-            <span class="badge badge-sisa-ok px-2">8 sesi</span>
-          </div>
-          <div class="sesi-bar"><div class="fill fill-ok" style="width:40%"></div></div>
-        </div>
+      <div class="card-body p-3" style="max-height: 400px; overflow-y: auto;">
+        @if($siswas->isEmpty())
+          <div class="text-center text-muted py-4">Belum ada data siswa.</div>
+        @else
+          @foreach($siswas as $siswa)
+            @php
+              $sisaSesi = max(0, $siswa->total_sesi - $siswa->sesi_terpakai);
+              $progressPercent = $siswa->total_sesi > 0 ? ($sisaSesi / $siswa->total_sesi) * 100 : 0;
+              $fillClass = 'fill-ok';
+              $badgeClass = 'badge-sisa-ok';
+              if ($sisaSesi <= 2) {
+                  $fillClass = 'fill-low';
+                  $badgeClass = 'badge-sisa-low';
+              } elseif ($sisaSesi <= 5) {
+                  $fillClass = 'fill-warn';
+                  $badgeClass = 'badge-sisa-warn';
+              }
+            @endphp
+            <div class="mb-3">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-600" style="font-size:.87rem;">{{ $siswa->nama }}</span>
+                <span class="badge {{ $badgeClass }} px-2">{{ $sisaSesi }} sesi</span>
+              </div>
+              <div class="sesi-bar"><div class="fill {{ $fillClass }}" style="width:{{ $progressPercent }}%"></div></div>
+            </div>
+          @endforeach
+        @endif
       </div>
     </div>
   </div>
@@ -53,27 +52,27 @@
                 <th>Hari</th>
                 <th>Jumlah Sesi</th>
                 <th>Aktif</th>
-                <th>Penuh</th>
+                <th>Tidak Aktif</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Senin</td><td>4</td><td><span class="badge badge-aktif px-2">3</span></td><td><span class="badge badge-penuh px-2">1</span></td>
-              </tr>
-              <tr>
-                <td>Selasa</td><td>4</td><td><span class="badge badge-aktif px-2">2</span></td><td><span class="badge badge-penuh px-2">2</span></td>
-              </tr>
-              <tr>
-                <td>Rabu</td><td>3</td><td><span class="badge badge-aktif px-2">2</span></td><td><span class="badge badge-penuh px-2">1</span></td>
-              </tr>
-              <tr>
-                <td>Kamis</td><td>0</td><td><span class="badge badge-sisa-ok px-2">0</span></td><td><span class="badge badge-sisa-low px-2">0</span></td>
-              </tr>
+              @if($rekapHari->isEmpty())
+                <tr><td colspan="4" class="text-muted text-center py-3">Belum ada jadwal mengajar minggu ini.</td></tr>
+              @else
+                @foreach($rekapHari as $rekap)
+                  <tr>
+                    <td><strong>{{ $rekap->hari }}</strong></td>
+                    <td>{{ $rekap->total }}</td>
+                    <td><span class="badge badge-aktif px-2">{{ $rekap->aktif }}</span></td>
+                    <td><span class="badge badge-penuh px-2">{{ $rekap->tidak_aktif }}</span></td>
+                  </tr>
+                @endforeach
+              @endif
             </tbody>
           </table>
         </div>
         <div class="mt-3 d-flex justify-content-end">
-          <button class="btn btn-export" data-action="show-toast" data-message="Rekap sesi disegarkan!">
+          <button class="btn btn-export" onclick="location.reload()">
             <i class="bi bi-arrow-clockwise me-1"></i>Refresh
           </button>
         </div>

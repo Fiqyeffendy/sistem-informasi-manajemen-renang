@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Tabel siswa menyimpan data utama murid beserta paket sesi dan status akun.
     public function up(): void
     {
         Schema::create('siswa', function (Blueprint $table) {
