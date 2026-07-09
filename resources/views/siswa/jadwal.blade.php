@@ -18,7 +18,6 @@
     <div class="row g-3">
         @forelse ($jadwals as $jadwal)
             @php
-                {{-- Buat inisial pelatih untuk visualisasi avatar. --}}
                 $initials = '';
                 if ($jadwal->pelatih && $jadwal->pelatih->nama) {
                     $words = explode(' ', trim($jadwal->pelatih->nama));

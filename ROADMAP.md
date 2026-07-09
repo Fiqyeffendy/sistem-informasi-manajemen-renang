@@ -40,7 +40,7 @@
 │           └──────────────┬──────────────────┘                           │
 │                          │                                              │
 │           ┌──────────────▼──────────────────┐                           │
-│           │       DATABASE (SQLite dev)      │                           │
+│           │       DATABASE (PostgreSQL)     │                           │
 │           │                                 │                           │
 │           │  users | siswa | pelatih         │                           │
 │           │  jadwal | presensi | pendaftaran  │                           │
@@ -54,10 +54,10 @@
 
 | Komponen        | Teknologi                                    |
 | :-------------- | :------------------------------------------- |
-| Backend         | **PHP 8.x** (Laravel 12 Framework)           |
+| Backend         | **PHP 8.3+** (Laravel 13 Framework)          |
 | RESTful API     | Laravel API Resource Routes + Controllers    |
-| Database        | SQLite (dev) / MySQL (production)            |
-| Frontend Admin  | Blade Template + Bootstrap 5 + Vanilla JS    |
+| Database        | PostgreSQL (dioperasikan via pgAdmin 4)      |
+| Frontend Admin  | Blade Template + Tailwind CSS v4 + Vanilla JS|
 | Frontend Mobile | Blade Template (siap dikonversi PWA)         |
 | Auth            | Laravel Session Authentication (built-in)    |
 | Middleware      | `EnsureUserHasRole` (admin/pelatih/siswa)    |

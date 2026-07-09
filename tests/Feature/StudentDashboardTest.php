@@ -42,4 +42,31 @@ class StudentDashboardTest extends TestCase
         $response->assertSee('Budi Santoso');
         $response->assertSee('Fella SwimStars');
     }
+
+    public function test_student_can_access_other_student_pages(): void
+    {
+        $siswa = Siswa::create([
+            'nama' => 'Budi Santoso',
+            'umur' => 10,
+            'no_hp_ortu' => '081234567890',
+            'program' => Program::SWIM_STARS->value,
+            'jenis_program' => JenisProgram::GROUP->value,
+            'lokasi_les' => LokasiLes::HOTEL_ASTON->value,
+            'total_sesi' => 8,
+            'sesi_terpakai' => 2,
+            'status' => 'aktif',
+        ]);
+
+        $user = User::create([
+            'name' => 'Budi Santoso',
+            'email' => 'budi@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'siswa',
+            'siswa_id' => $siswa->id,
+        ]);
+
+        $this->actingAs($user)->get('/siswa/jadwal')->assertOk();
+        $this->actingAs($user)->get('/siswa/presensi')->assertOk();
+        $this->actingAs($user)->get('/siswa/sesi')->assertOk();
+    }
 }

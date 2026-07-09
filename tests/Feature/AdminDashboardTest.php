@@ -126,4 +126,12 @@ class AdminDashboardTest extends TestCase
         $response = $this->actingAs($studentUser)->get('/admin/dashboard');
         $response->assertForbidden();
     }
+
+    public function test_admin_can_access_view_only_pages(): void
+    {
+        $this->actingAs($this->adminUser)->get('/admin/siswa')->assertOk();
+        $this->actingAs($this->adminUser)->get('/admin/pendaftaran')->assertOk();
+        $this->actingAs($this->adminUser)->get('/admin/pelatih')->assertOk();
+        $this->actingAs($this->adminUser)->get('/admin/jadwal')->assertOk();
+    }
 }

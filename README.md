@@ -1,15 +1,15 @@
 # 🏊‍♂️ SIMPEL-Fella
 **Sistem Informasi Manajemen Penjadwalan & Presensi Les Renang Fella**
 
-SIMPEL-Fella adalah platform manajemen les renang terintegrasi yang menggabungkan **Web Admin (Desktop)** untuk pengelolaan data terpusat dan **Progressive Web App (PWA) Mobile** untuk Pelatih dan Siswa/Orang Tua. Sistem ini dibangun dengan konsep **RESTful API** berbasis Laravel sebagai pusat data (Single Source of Truth).
+SIMPEL-Fella adalah platform manajemen les renang terintegrasi yang menggabungkan **Web Admin (Desktop)** untuk pengelolaan data terpusat dan **Web Mobile Responsif (PWA-Ready)** untuk Pelatih dan Siswa/Orang Tua. Sistem ini dibangun dengan konsep **RESTful API** berbasis Laravel sebagai pusat data (Single Source of Truth).
 
 ---
 
 ## 🏛️ Arsitektur Proyek
 Aplikasi menggunakan arsitektur **Monolitik Hybrid dengan RESTful API**:
 *   **Backend:** PHP (Laravel Framework) bertindak sebagai API Engine dan Database Manager.
-*   **Web Admin:** Desktop-optimized dashboard menggunakan Laravel Blade & Bootstrap.
-*   **PWA Mobile (Pelatih & Siswa):** Mobile-optimized responsive views yang didukung oleh Web App Manifest dan Service Worker sehingga dapat diinstal di HP layaknya aplikasi native.
+*   **Web Admin:** Desktop-optimized dashboard menggunakan Laravel Blade & Tailwind CSS v4.
+*   **Mobile Web (Pelatih & Siswa):** Tampilan mobile-responsive yang dioptimalkan untuk diakses melalui smartphone, dirancang siap untuk dikonversi menjadi Progressive Web App (PWA) lengkap dengan Web App Manifest dan Service Worker (PWA-ready).
 
 ---
 
@@ -21,7 +21,7 @@ simpel-fella/
 ├── bootstrap/            ← Konfigurasi inisialisasi framework
 ├── config/               ← File konfigurasi Laravel (Database, CORS, Auth, dll)
 ├── database/             ← Migrasi database, Seeders untuk data awal
-├── public/               ← File publik (.htaccess, CSS, JS, manifest.json, sw.js)
+├── public/               ← File publik (.htaccess, favicon.ico, dll)
 ├── resources/            
 │   ├── css/              ← Global stylesheet
 │   ├── js/               ← Handler frontend JS (auth.js, main.js)
@@ -39,21 +39,21 @@ simpel-fella/
 
 ## 📊 Spesifikasi Stack Teknologi
 *   **Bahasa Utama:** PHP (Backend) & JavaScript (Frontend)
-*   **Framework Backend:** Laravel
-*   **Database:** PostgreSQL (Production) / SQLite atau MySQL (Lokal)
-*   **Frontend UI:** Laravel Blade, Bootstrap 5, Vanilla CSS
+*   **Framework Backend:** Laravel 13
+*   **Database:** PostgreSQL (dioperasikan & dikelola dengan pgAdmin 4)
+*   **Frontend UI:** Laravel Blade, Tailwind CSS v4 (terintegrasi dengan Vite)
 *   **API Protocol:** RESTful API (JSON Response)
-*   **Mobile Tech:** PWA (Web App Manifest + Service Worker)
+*   **Mobile Tech:** Mobile-responsive Web (PWA-ready)
 
 ---
 
 ## ⚡ Cara Menjalankan di Lokal
 
 ### Prasyarat
-*   PHP >= 8.2
+*   PHP >= 8.3
 *   Composer
 *   Node.js & NPM
-*   Database (PostgreSQL, MySQL, atau SQLite)
+*   PostgreSQL Database (dan pgAdmin 4 sebagai GUI tool)
 
 ### Langkah Instalasi
 1.  **Clone repository** dan masuk ke direktori proyek:
@@ -66,20 +66,18 @@ simpel-fella/
     cp .env.example .env
     ```
     *Sesuaikan isian database (`DB_CONNECTION`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) pada file `.env` baru Anda.*
-3.  **Install dependensi PHP & JavaScript:**
+3.  **Jalankan Inisialisasi Otomatis (Setup):**
+    Aplikasi menyediakan script setup terintegrasi untuk menginstall dependensi, membuat `.env`, generate app key, menjalankan migrasi database, dan membuild aset frontend:
     ```bash
-    composer install
-    npm install
+    composer run setup
     ```
-4.  **Buat App Key Laravel:**
-    ```bash
-    php artisan key:generate
-    ```
-5.  **Jalankan Migrasi & Database Seeder:**
+    *(Pastikan Anda telah menyesuaikan kredensial database PostgreSQL di file `.env` baru Anda jika ingin menggunakan pgAdmin 4/Postgres sebelum menjalankan command di bawah).*
+    
+4.  **Jalankan Migrasi & Database Seeder (Manual - Jika dibutuhkan):**
     ```bash
     php artisan migrate:fresh --seed
     ```
-6.  **Jalankan Server Lokal:**
+5.  **Jalankan Server Lokal:**
     *   Terminal 1 (Laravel Server):
         ```bash
         php artisan serve
@@ -88,7 +86,17 @@ simpel-fella/
         ```bash
         npm run dev
         ```
-7.  Akses web melalui browser di alamat `http://127.0.0.1:8000`.
+6.  Akses web melalui browser di alamat `http://127.0.0.1:8000`.
+
+---
+
+## 🔑 Akun Demo (Hasil Seeder)
+Gunakan akun-akun berikut untuk masuk ke sistem setelah menjalankan seeder:
+
+| Role | Email | Password | Catatan |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin@fella.id` | `password` | Mengakses dashboard admin utama |
+| **Pelatih** | `rizal@fella.id` | `password` | Mengakses jadwal mengajar & presensi siswa |
 
 ---
 
@@ -112,5 +120,5 @@ php artisan test
 ### Halaman Web View
 *   Login: `/login`
 *   Admin Panel: `/admin/dashboard`, `/admin/siswa`, `/admin/jadwal`, dll.
-*   PWA Pelatih: `/pelatih/dashboard`, `/pelatih/presensi`, dll.
-*   PWA Siswa: `/siswa/dashboard`, `/siswa/sesi`, dll.
+*   Dashboard Pelatih: `/pelatih/dashboard`, `/pelatih/presensi`, dll.
+*   Dashboard Siswa: `/siswa/dashboard`, `/siswa/sesi`, dll.

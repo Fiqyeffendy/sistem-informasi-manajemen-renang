@@ -26,7 +26,7 @@
                 </div>
                 <div class="card-body p-4">
                     @php
-                        {{-- Hitung sisa sesi dan status visual berdasarkan kuota yang tersisa. --}}
+                        // Hitung sisa sesi dan status visual berdasarkan kuota yang tersisa.
                         $total = max(1, $siswa?->total_sesi ?? 1);
                         $terpakai = $siswa?->sesi_terpakai ?? 0;
                         $sisa = max(0, $total - $terpakai);
