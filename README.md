@@ -178,26 +178,27 @@ php artisan test
 
 ## 📚 Panduan Teknis & Jawaban Evaluasi Sistem
 
-Berikut adalah penjelasan teknis sederhana mengenai cara kerja, konfigurasi, keamanan, dan deployment dari aplikasi **SIMPEL-Fella**:
-
 ### 1. File Konfigurasi Database yang Digunakan
-Di project Laravel ini, urusan koneksi database diatur lewat dua file utama yang saling bekerja sama:
-*   **File Pengaturan Utama (`config/database.php`):** Di file [[config/database.php](file:///d:/simpel-fella/config/database.php)], Laravel menyiapkan wadah/driver untuk berbagai jenis database seperti MySQL, PostgreSQL, SQLite, dll. Tapi isi pengaturannya tidak ditulis langsung (hardcoded) di sana.
-*   **File Rahasia Lokal (`.env`):** Data asli seperti username, password, host, dan nama databasenya kita simpan di file [[.env](file:///d:/simpel-fella/.env)] yang ada di folder utama (root) project. Di file ini, kita atur tipe koneksinya ke `pgsql` (karena project ini aslinya pakai PostgreSQL):
-    ```env
-    DB_CONNECTION=pgsql
-    DB_HOST=127.0.0.1
-    DB_PORT=5432
-    DB_DATABASE=simpel_fella
-    DB_USERNAME=postgres
-    DB_PASSWORD=password
-    ```
-    *Kenapa dipisah? Supaya kalau password database kita ganti atau pas di-upload ke server lain, kita tinggal ganti file `.env` saja tanpa mengotak-atik kode program utamanya.*
 
----
+Konfigurasi database pada aplikasi ini terdapat pada dua file, yaitu **`.env`** dan **`config/database.php`**.
+
+- **`config/database.php`** berfungsi sebagai konfigurasi utama database pada Laravel. File ini menyediakan pengaturan untuk beberapa driver database yang didukung, seperti MySQL, PostgreSQL, SQLite, dan SQL Server. Nilai konfigurasi yang digunakan diambil dari variabel yang terdapat pada file `.env`.
+
+- **`.env`** digunakan untuk menyimpan konfigurasi koneksi database yang digunakan oleh aplikasi, meliputi jenis database, host, port, nama database, username, dan password. Pada aplikasi ini, database yang digunakan adalah PostgreSQL dengan konfigurasi sebagai berikut.
+
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=namadb
+DB_USERNAME=usrnmedb
+DB_PASSWORD=password
+```
+
+Pemisahan konfigurasi ini memudahkan pengelolaan aplikasi karena perubahan informasi koneksi database dapat dilakukan melalui file `.env` tanpa perlu mengubah kode program pada `config/database.php`.
 
 ### 2. Bagaimana Cara Membuat Route Baru di Aplikasi?
-Routing itu gampangnya adalah cara kita mengarahkan URL yang diketik pengguna di browser agar membuka halaman atau fitur yang pas. Proses pembuatannya begini:
+Routing adalah cara kita mengarahkan URL yang diketik pengguna di browser agar membuka halaman atau fitur yang pas. Proses pembuatannya:
 1.  **Pilih File Rutenya:** 
     Laravel sudah menyediakan filenya di dalam folder `routes/`. Di aplikasi ini, kita daftarkan lewat [[bootstrap/app.php](file:///d:/simpel-fella/bootstrap/app.php)] yang mengarah ke:
     *   [[routes/web.php](file:///d:/simpel-fella/routes/web.php)] kalau mau membuat rute halaman biasa (web dashboard).
@@ -213,17 +214,17 @@ Routing itu gampangnya adalah cara kita mengarahkan URL yang diketik pengguna di
         Route::view('/kontak', 'kontak')->name('kontak');
         ```
 3.  **Kasih Pengaman (Middleware):**
-    Supaya rute itu tidak bisa dibuka sembarangan orang, kita bisa bungkus rutenya pakai middleware seperti `auth` (harus login dulu) atau `role` (harus punya akses tertentu).
+    Supaya rute itu tidak bisa dibuka sembarangan orang, bungkus rutenya pakai middleware seperti `auth` (harus login dulu) atau `role` (harus punya akses tertentu).
 
 ---
 
 ### 3. Bagaimana Sistem Membagi Hak Akses (Role)?
-Aplikasi ini punya 3 tingkat hak akses (role): **Admin**, **Pelatih**, dan **Siswa**. Caranya membatasinya cukup simpel:
+Aplikasi ini punya 3 tingkat hak akses (role): **Admin**, **Pelatih**, dan **Siswa**. Caranya membatasinya:
 1.  **Di Database:** Tabel `users` punya kolom `role` untuk menyimpan status pengguna (isinya berupa tulisan `admin`, `pelatih`, atau `siswa`).
 2.  **Pintu Gerbang (Middleware):** Kita membuat alat pemeriksa otomatis bernama [[EnsureUserHasRole.php](file:///d:/simpel-fella/app/Http/Middleware/EnsureUserHasRole.php)]. 
-    *   Tugas alat ini simpel: pas ada user yang mau buka halaman, dia cek dulu *"User ini rolenya apa?"*.
+    *   Tugas alat ini: pas ada user yang mau buka halaman, dia cek dulu *"User ini rolenya apa?"*.
     *   Kalau rolenya cocok dengan yang diminta halaman tersebut, silakan masuk. Kalau tidak cocok, sistem langsung menolak dan menampilkan error *403 Forbidden* ("Anda tidak memiliki akses").
-3.  **Pemasangan di Rute:** Alat ini diberi nama panggilan `role` di file [[bootstrap/app.php](file:///d:/simpel-fella/bootstrap/app.php)]. Setelah itu, kita tinggal tempel di [[routes/web.php](file:///d:/simpel-fella/routes/web.php)]:
+3.  **Pemasangan di Rute:** Alat ini diberi nama panggilan `role` di file [[bootstrap/app.php](file:///d:/simpel-fella/bootstrap/app.php)]. Setelah itu tinggal tempel di [[routes/web.php](file:///d:/simpel-fella/routes/web.php)]:
     *   `Route::middleware(['role:admin'])` → semua rute di dalamnya cuma bisa dibuka Admin.
     *   `Route::middleware(['role:pelatih'])` → cuma bisa dibuka Pelatih.
     *   `Route::middleware(['role:siswa'])` → cuma bisa dibuka Siswa.
@@ -238,14 +239,14 @@ Jika ingin mengganti database sistem dari PostgreSQL ke MySQL :
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
     DB_PORT=3306
-    DB_DATABASE=nama_database_mysql
-    DB_USERNAME=root
+    DB_DATABASE=nama
+    DB_USERNAME=username
     DB_PASSWORD=password
     ```
-2.  **Aktifkan Ekstensi PHP MySQL:**
-    Pastikan ekstensi `pdo_mysql` sudah terpasang dan aktif di file konfigurasi `php.ini` server/PC Anda (biasanya diaktifkan lewat kontrol panel XAMPP).
+2.  **Mengaktifkan Ekstensi PHP MySQL:**
+    Ekstensi `pdo_mysql` harus sudah terpasang dan aktif di file konfigurasi `php.ini` server/PC Anda (biasanya diaktifkan lewat kontrol panel XAMPP).
 3.  **Buat Database Baru:**
-    Buka MySQL client Anda (seperti phpMyAdmin atau TablePlus), lalu buat database kosong baru dengan nama yang sama seperti nilai `DB_DATABASE` di `.env` tadi (misalnya: `nama_database_mysql`).
+    Buka MySQL client (seperti phpMyAdmin atau TablePlus), lalu buat database kosong baru dengan nama yang sama seperti nilai `DB_DATABASE` di `.env` tadi (misalnya: `nama_database_mysql`).
 4.  **Jalankan Ulang Migrasi:**
     Buka terminal di folder project, lalu jalankan perintah ini untuk membuat semua tabel baru secara otomatis beserta data contohnya:
     ```bash
@@ -255,31 +256,31 @@ Jika ingin mengganti database sistem dari PostgreSQL ke MySQL :
 ---
 
 ### 5. Cara Deploy Aplikasi ke Server Agar Bisa Online
-Supaya aplikasi ini bisa diakses lewat internet oleh orang lain, berikut adalah tahapan deployment-nya secara umum:
+Supaya aplikasi ini bisa diakses lewat internet oleh orang lain, berikut adalah tahapan deployment-nya:
 1.  **Siapkan Server:** Sewa VPS (misalnya pakai OS Ubuntu Server) dan install web server (Nginx/Apache), PHP (versi terbaru >= 8.3 beserta ekstensi database), database server (MySQL/PostgreSQL), Composer, dan Node.js.
 2.  **Upload & Install Code:**
-    *   Clone project dari repository Git Anda ke server.
-    *   Jalankan perintah `composer install --no-dev --optimize-autoloader` di terminal server agar semua library PHP terinstall dengan versi yang ringan dan cepat khusus untuk produksi.
+    *   Clone project dari repository Git ke server.
+    *   Menjalankan perintah `composer install --no-dev --optimize-autoloader` di terminal server agar semua library PHP terinstall dengan versi yang ringan dan cepat khusus untuk produksi.
 3.  **Setup `.env` Produksi:**
-    Buat file `.env` di server. Pengaturannya wajib aman:
+    Buat file `.env` di server :
     *   Ganti `APP_ENV=production`.
-    *   Ganti `APP_DEBUG=false` (sangat penting supaya kalau ada error, codingan asli kita tidak kelihatan oleh hacker).
+    *   Ganti `APP_DEBUG=false` 
     *   Isi domain website Anda di `APP_URL`.
     *   Masukkan password database server asli.
 4.  **Siapkan Database & Kunci Pengaman:**
-    Jalankan perintah ini di server untuk membuat kunci enkripsi dan struktur database:
+    Jalankan perintah di server untuk membuat kunci enkripsi dan struktur database:
     ```bash
     php artisan key:generate
     php artisan migrate --force --seed
     ```
 5.  **Build Tampilan (Vite):**
-    Jalankan perintah ini untuk mengunduh modul CSS/JS dan melakukan kompilasi produksi agar website dapat dimuat dengan sangat cepat:
+    Jalankan perintah untuk mengunduh modul CSS/JS dan melakukan kompilasi produksi agar website dapat dimuat dengan sangat cepat:
     ```bash
     npm install
     npm run build
     ```
 6.  **Optimalkan Kecepatan (Cache):**
-    Jalankan perintah cache ini agar server tidak perlu membaca ulang file konfigurasi setiap kali ada pengunjung:
+    Jalankan perintah cache agar server tidak perlu membaca ulang file konfigurasi setiap kali ada pengunjung:
     ```bash
     php artisan config:cache
     php artisan route:cache
