@@ -1,49 +1,77 @@
 # 🏊‍♂️ SIMPEL-Fella
-**Sistem Informasi Manajemen Penjadwalan & Presensi Les Renang Fella**
+**Sistem Informasi Manajemen Pelatihan & Presensi Les Renang Fella**
 
-SIMPEL-Fella adalah platform manajemen les renang terintegrasi yang menggabungkan **Web Admin (Desktop)** untuk pengelolaan data terpusat dan **Web Mobile Responsif (PWA-Ready)** untuk Pelatih dan Siswa/Orang Tua. Sistem ini dibangun dengan konsep **RESTful API** berbasis Laravel sebagai pusat data (Single Source of Truth).
+SIMPEL-Fella adalah platform manajemen les renang terintegrasi yang menggabungkan **Web Admin (Desktop)** untuk pengelolaan data terpusat dan **Web Mobile Responsif** untuk Pelatih dan Siswa/Orang Tua. Sistem ini dibangun dengan konsep **RESTful API** berbasis Laravel 13 sebagai pusat data (*Single Source of Truth*).
+
+---
+
+## 🚀 Fitur Utama
+
+Sistem ini dirancang untuk mempermudah operasional kursus renang dengan 3 hak akses (Multi-Role):
+
+1.  **Dashboard Admin (Desktop):**
+    *   Statistik data ringkas (Total Siswa, Kelas Aktif, Pelatih, Kehadiran Hari Ini).
+    *   Pengelolaan data induk (Siswa, Pelatih, Jadwal Kelas, Pendaftaran Baru).
+    *   Monitoring sisa sesi aktif siswa secara real-time.
+    *   Pelaporan kehadiran dan perkembangan latihan.
+2.  **Dashboard Pelatih (Mobile Responsive):**
+    *   Melihat jadwal mengajar pribadi (Hari & Jam).
+    *   Melihat daftar siswa di bawah binaannya.
+    *   Melakukan input presensi latihan (Hadir, Izin, Alpha) dengan catatan evaluasi perkembangan siswa.
+3.  **Dashboard Siswa / Orang Tua (Mobile Responsive):**
+    *   Melihat sisa sesi latihan yang masih aktif.
+    *   Melihat jadwal latihan renang pribadi yang terdaftar.
+    *   Melacak riwayat presensi beserta catatan evaluasi dari pelatih.
 
 ---
 
 ## 🏛️ Arsitektur Proyek
 Aplikasi menggunakan arsitektur **Monolitik Hybrid dengan RESTful API**:
-*   **Backend:** PHP (Laravel Framework) bertindak sebagai API Engine dan Database Manager.
-*   **Web Admin:** Desktop-optimized dashboard menggunakan Laravel Blade & Tailwind CSS v4.
-*   **Mobile Web (Pelatih & Siswa):** Tampilan mobile-responsive yang dioptimalkan untuk diakses melalui smartphone, dirancang siap untuk dikonversi menjadi Progressive Web App (PWA) lengkap dengan Web App Manifest dan Service Worker (PWA-ready).
+*   **Backend:** PHP 8.3+ dengan **Laravel 13 Framework** bertindak sebagai API Engine dan Database Manager.
+*   **Frontend Web Admin & Mobile View:** Menggunakan Laravel Blade dengan perpaduan **Tailwind CSS v4** (melalui compiler Vite) dan **Bootstrap v5.3.3** untuk layout responsif premium.
+*   **RESTful API:** Menyediakan endpoint mandiri (`/api/*`) untuk integrasi data yang bersih.
+
+---
+
+## 📊 Spesifikasi Stack Teknologi
+*   **Bahasa Utama:** PHP >= 8.3 (Backend) & JavaScript ES6 (Frontend)
+*   **Framework Backend:** Laravel 13.x
+*   **Database:** PostgreSQL (dioperasikan & dikelola dengan pgAdmin 4)
+*   **Frontend UI Compiler:** Vite + Tailwind CSS v4 & Bootstrap v5.3.3
+*   **API Protocol:** RESTful API (JSON Response)
 
 ---
 
 ## 📂 Struktur Direktori Utama
-Proyek sekarang berada langsung di root folder `simpel-fella/` (Monorepo):
+Proyek menggunakan struktur monorepo Laravel terstandarisasi:
 ```text
 simpel-fella/
-├── app/                  ← Logika PHP, Model, Controller (Api/ & Web/)
+├── app/                  ← Logika PHP, Model, Controller, Enums
+│   ├── Enums/            ← Definisi Enum (JenisProgram, LokasiLes, Program)
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Api/      ← Controller khusus RESTful API (CRUD)
+│   │   │   ├── Auth/     ← Controller Autentikasi (Login, Register)
+│   │   │   └── *.php     ← Controller Dashboard View (Admin, Pelatih, Siswa)
+│   │   └── Middleware/   ← Proteksi hak akses & Autentikasi role
+│   └── Models/           ← Relasi database (Siswa, Pelatih, Jadwal, Presensi, User)
 ├── bootstrap/            ← Konfigurasi inisialisasi framework
 ├── config/               ← File konfigurasi Laravel (Database, CORS, Auth, dll)
-├── database/             ← Migrasi database, Seeders untuk data awal
-├── public/               ← File publik (.htaccess, favicon.ico, dll)
+├── database/             ← Migrasi database, Seeders data demo
+├── public/               
+│   └── css/              ← Global Custom CSS (variables.css, shell.css, components.css)
 ├── resources/            
-│   ├── css/              ← Global stylesheet
+│   ├── css/              ← Integrasi Tailwind CSS v4 (`app.css`)
 │   ├── js/               ← Handler frontend JS (auth.js, main.js)
 │   └── views/            ← Template Blade (admin/, pelatih/, siswa/, layouts/)
 ├── routes/               
 │   ├── api.php           ← Registrasi endpoint RESTful API (/api/*)
 │   └── web.php           ← Registrasi rute web / views
 ├── tests/                ← Unit & Feature automated testing
-├── vite.config.js        ← Konfigurasi kompilasi aset frontend
+├── vite.config.js        ← Konfigurasi Vite & Tailwind compiler
 ├── ROADMAP.md            ← Dokumen perencanaan tahapan fitur
 └── TODO.md               ← Checklist pekerjaan
 ```
-
----
-
-## 📊 Spesifikasi Stack Teknologi
-*   **Bahasa Utama:** PHP (Backend) & JavaScript (Frontend)
-*   **Framework Backend:** Laravel 13
-*   **Database:** PostgreSQL (dioperasikan & dikelola dengan pgAdmin 4)
-*   **Frontend UI:** Laravel Blade, Tailwind CSS v4 (terintegrasi dengan Vite)
-*   **API Protocol:** RESTful API (JSON Response)
-*   **Mobile Tech:** Mobile-responsive Web (PWA-ready)
 
 ---
 
@@ -65,27 +93,27 @@ simpel-fella/
     ```bash
     cp .env.example .env
     ```
-    *Sesuaikan isian database (`DB_CONNECTION`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) pada file `.env` baru Anda.*
-3.  **Jalankan Inisialisasi Otomatis (Setup):**
-    Aplikasi menyediakan script setup terintegrasi untuk menginstall dependensi, membuat `.env`, generate app key, menjalankan migrasi database, dan membuild aset frontend:
+    *Sesuaikan isian database (`DB_CONNECTION=pgsql`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) pada file `.env` baru Anda agar terhubung dengan PostgreSQL.*
+    
+3.  **Jalankan Inisialisasi Otomatis (Setup Script):**
+    Aplikasi menyediakan script setup terintegrasi untuk menginstall dependensi PHP/Node, membuat `.env`, generate app key, migrasi database, dan membuild aset frontend:
     ```bash
     composer run setup
     ```
-    *(Pastikan Anda telah menyesuaikan kredensial database PostgreSQL di file `.env` baru Anda jika ingin menggunakan pgAdmin 4/Postgres sebelum menjalankan command di bawah).*
-    
 4.  **Jalankan Migrasi & Database Seeder (Manual - Jika dibutuhkan):**
     ```bash
     php artisan migrate:fresh --seed
     ```
 5.  **Jalankan Server Lokal:**
-    *   Terminal 1 (Laravel Server):
+    *   **Metode 1 (Satu Perintah - Direkomendasikan):**
+        Jalankan server PHP, Laravel queue listener, logger Pail, dan Vite compiler sekaligus dalam satu terminal menggunakan Composer script:
         ```bash
-        php artisan serve
+        composer run dev
         ```
-    *   Terminal 2 (Vite Compiler):
-        ```bash
-        npm run dev
-        ```
+    *   **Metode 2 (Manual - Dua Terminal):**
+        *   Terminal 1 (Laravel Server): `php artisan serve`
+        *   Terminal 2 (Vite Compiler): `npm run dev`
+
 6.  Akses web melalui browser di alamat `http://127.0.0.1:8000`.
 
 ---
@@ -93,32 +121,177 @@ simpel-fella/
 ## 🔑 Akun Demo (Hasil Seeder)
 Gunakan akun-akun berikut untuk masuk ke sistem setelah menjalankan seeder:
 
-| Role | Email | Password | Catatan |
+| Role | Email | Password | Hak Akses |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@fella.id` | `password` | Mengakses dashboard admin utama |
-| **Pelatih** | `rizal@fella.id` | `password` | Mengakses jadwal mengajar & presensi siswa |
+| **Admin** | `admin@fella.id` | `password` | Mengakses dashboard admin utama & seluruh CRUD data |
+| **Pelatih** | `rizal@fella.id` | `password` | Mengakses jadwal mengajar, siswa binaan, & presensi siswa |
+
+> [!NOTE]
+> Untuk role **Siswa**, Anda dapat melakukan pendaftaran akun baru secara mandiri melalui menu **Daftar Sekarang** pada halaman `/register` untuk mendapatkan akses ke dashboard siswa.
 
 ---
 
-## 🧪 Cara Menjalankan Pengujian otomatis (Testing)
-Untuk memastikan tidak ada logika bisnis atau endpoint API yang rusak, jalankan automated testing bawaan:
+## 🧪 Pengujian Otomatis (Testing)
+Untuk memastikan seluruh logika bisnis, relasi database, dan endpoint API berfungsi dengan baik, jalankan automated testing bawaan:
 ```bash
+composer run test
+# atau
 php artisan test
 ```
 
 ---
 
-## 🔗 Endpoint RESTful API & Rute Utama
+## 🔗 Rute Utama & Endpoint API
+
+### Halaman Web View
+*   **Landing Page:** `/`
+*   **Autentikasi:** `/login` & `/register`
+*   **Admin Panel:** 
+    *   Dashboard: `/admin/dashboard`
+    *   Kelola Siswa: `/admin/siswa`
+    *   Kelola Pelatih: `/admin/pelatih`
+    *   Kelola Pendaftaran: `/admin/pendaftaran`
+    *   Kelola Jadwal: `/admin/jadwal`
+    *   Kelola Kehadiran: `/admin/presensi`
+    *   Kelola Sesi Siswa: `/admin/sesi`
+    *   Laporan Bulanan: `/admin/laporan`
+*   **Dashboard Pelatih:**
+    *   Beranda Pelatih: `/pelatih/dashboard`
+    *   Jadwal Mengajar: `/pelatih/jadwal`
+    *   Siswa Binaan: `/pelatih/siswa`
+    *   Input Presensi: `/pelatih/presensi`
+*   **Dashboard Siswa:**
+    *   Beranda Siswa: `/siswa/dashboard`
+    *   Jadwal Latihan: `/siswa/jadwal`
+    *   Riwayat Kehadiran: `/siswa/presensi`
+    *   Sisa Sesi Aktif: `/siswa/sesi`
 
 ### RESTful API Endpoints (`/api/*`)
+*   `GET /api/user` — Mengecek user yang sedang login (Sanctum Authenticated)
 *   `api/siswa` — CRUD Data Siswa
 *   `api/pelatih` — CRUD Data Pelatih
 *   `api/pendaftaran` — CRUD Pendaftaran Siswa Baru
 *   `api/jadwal` — CRUD Jadwal Latihan
-*   `api/presensi` — CRUD Riwayat Kehadiran (Fase 1)
+*   `api/presensi` — CRUD Riwayat Kehadiran
 
-### Halaman Web View
-*   Login: `/login`
-*   Admin Panel: `/admin/dashboard`, `/admin/siswa`, `/admin/jadwal`, dll.
-*   Dashboard Pelatih: `/pelatih/dashboard`, `/pelatih/presensi`, dll.
-*   Dashboard Siswa: `/siswa/dashboard`, `/siswa/sesi`, dll.
+---
+
+## 📚 Panduan Teknis & Jawaban Evaluasi Sistem
+
+Berikut adalah penjelasan teknis sederhana mengenai cara kerja, konfigurasi, keamanan, dan deployment dari aplikasi **SIMPEL-Fella**:
+
+### 1. File Konfigurasi Database yang Digunakan
+Di project Laravel ini, urusan koneksi database diatur lewat dua file utama yang saling bekerja sama:
+*   **File Pengaturan Utama (`config/database.php`):** Di file [[config/database.php](file:///d:/simpel-fella/config/database.php)], Laravel menyiapkan wadah/driver untuk berbagai jenis database seperti MySQL, PostgreSQL, SQLite, dll. Tapi isi pengaturannya tidak ditulis langsung (hardcoded) di sana.
+*   **File Rahasia Lokal (`.env`):** Data asli seperti username, password, host, dan nama databasenya kita simpan di file [[.env](file:///d:/simpel-fella/.env)] yang ada di folder utama (root) project. Di file ini, kita atur tipe koneksinya ke `pgsql` (karena project ini aslinya pakai PostgreSQL):
+    ```env
+    DB_CONNECTION=pgsql
+    DB_HOST=127.0.0.1
+    DB_PORT=5432
+    DB_DATABASE=simpel_fella
+    DB_USERNAME=postgres
+    DB_PASSWORD=password
+    ```
+    *Kenapa dipisah? Supaya kalau password database kita ganti atau pas di-upload ke server lain, kita tinggal ganti file `.env` saja tanpa mengotak-atik kode program utamanya.*
+
+---
+
+### 2. Bagaimana Cara Membuat Route Baru di Aplikasi?
+Routing itu gampangnya adalah cara kita mengarahkan URL yang diketik pengguna di browser agar membuka halaman atau fitur yang pas. Proses pembuatannya begini:
+1.  **Pilih File Rutenya:** 
+    Laravel sudah menyediakan filenya di dalam folder `routes/`. Di aplikasi ini, kita daftarkan lewat [[bootstrap/app.php](file:///d:/simpel-fella/bootstrap/app.php)] yang mengarah ke:
+    *   [[routes/web.php](file:///d:/simpel-fella/routes/web.php)] kalau mau membuat rute halaman biasa (web dashboard).
+    *   [[routes/api.php](file:///d:/simpel-fella/routes/api.php)] kalau mau membuat rute data API (format JSON).
+2.  **Tulis Rutenya:**
+    Gunakan fungsi `Route` diikuti metodenya (biasanya `get` untuk menampilkan halaman, atau `post` untuk mengirim data/form).
+    *   *Contoh kalau mau buat halaman baru:*
+        ```php
+        Route::get('/halaman-baru', [NamaController::class, 'namaFungsi'])->name('halaman.baru');
+        ```
+    *   *Kita juga bisa langsung ngerender tampilan (view) tanpa controller:*
+        ```php
+        Route::view('/kontak', 'kontak')->name('kontak');
+        ```
+3.  **Kasih Pengaman (Middleware):**
+    Supaya rute itu tidak bisa dibuka sembarangan orang, kita bisa bungkus rutenya pakai middleware seperti `auth` (harus login dulu) atau `role` (harus punya akses tertentu).
+
+---
+
+### 3. Bagaimana Sistem Membagi Hak Akses (Role)?
+Aplikasi ini punya 3 tingkat hak akses (role): **Admin**, **Pelatih**, dan **Siswa**. Caranya membatasinya cukup simpel:
+1.  **Di Database:** Tabel `users` punya kolom `role` untuk menyimpan status pengguna (isinya berupa tulisan `admin`, `pelatih`, atau `siswa`).
+2.  **Pintu Gerbang (Middleware):** Kita membuat alat pemeriksa otomatis bernama [[EnsureUserHasRole.php](file:///d:/simpel-fella/app/Http/Middleware/EnsureUserHasRole.php)]. 
+    *   Tugas alat ini simpel: pas ada user yang mau buka halaman, dia cek dulu *"User ini rolenya apa?"*.
+    *   Kalau rolenya cocok dengan yang diminta halaman tersebut, silakan masuk. Kalau tidak cocok, sistem langsung menolak dan menampilkan error *403 Forbidden* ("Anda tidak memiliki akses").
+3.  **Pemasangan di Rute:** Alat ini diberi nama panggilan `role` di file [[bootstrap/app.php](file:///d:/simpel-fella/bootstrap/app.php)]. Setelah itu, kita tinggal tempel di [[routes/web.php](file:///d:/simpel-fella/routes/web.php)]:
+    *   `Route::middleware(['role:admin'])` → semua rute di dalamnya cuma bisa dibuka Admin.
+    *   `Route::middleware(['role:pelatih'])` → cuma bisa dibuka Pelatih.
+    *   `Route::middleware(['role:siswa'])` → cuma bisa dibuka Siswa.
+
+---
+
+### 4. Langkah-Langkah Mengubah Database dari PostgreSQL ke MySQL
+Jika ingin mengganti database sistem dari PostgreSQL ke MySQL : 
+1.  **Edit File [[.env](file:///d:/simpel-fella/.env)]:**
+    Ubah nilai variabel database dari driver `pgsql` menjadi `mysql` beserta port defaultnya (`3306`):
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=nama_database_mysql
+    DB_USERNAME=root
+    DB_PASSWORD=password
+    ```
+2.  **Aktifkan Ekstensi PHP MySQL:**
+    Pastikan ekstensi `pdo_mysql` sudah terpasang dan aktif di file konfigurasi `php.ini` server/PC Anda (biasanya diaktifkan lewat kontrol panel XAMPP).
+3.  **Buat Database Baru:**
+    Buka MySQL client Anda (seperti phpMyAdmin atau TablePlus), lalu buat database kosong baru dengan nama yang sama seperti nilai `DB_DATABASE` di `.env` tadi (misalnya: `nama_database_mysql`).
+4.  **Jalankan Ulang Migrasi:**
+    Buka terminal di folder project, lalu jalankan perintah ini untuk membuat semua tabel baru secara otomatis beserta data contohnya:
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
+
+---
+
+### 5. Cara Deploy Aplikasi ke Server Agar Bisa Online
+Supaya aplikasi ini bisa diakses lewat internet oleh orang lain, berikut adalah tahapan deployment-nya secara umum:
+1.  **Siapkan Server:** Sewa VPS (misalnya pakai OS Ubuntu Server) dan install web server (Nginx/Apache), PHP (versi terbaru >= 8.3 beserta ekstensi database), database server (MySQL/PostgreSQL), Composer, dan Node.js.
+2.  **Upload & Install Code:**
+    *   Clone project dari repository Git Anda ke server.
+    *   Jalankan perintah `composer install --no-dev --optimize-autoloader` di terminal server agar semua library PHP terinstall dengan versi yang ringan dan cepat khusus untuk produksi.
+3.  **Setup `.env` Produksi:**
+    Buat file `.env` di server. Pengaturannya wajib aman:
+    *   Ganti `APP_ENV=production`.
+    *   Ganti `APP_DEBUG=false` (sangat penting supaya kalau ada error, codingan asli kita tidak kelihatan oleh hacker).
+    *   Isi domain website Anda di `APP_URL`.
+    *   Masukkan password database server asli.
+4.  **Siapkan Database & Kunci Pengaman:**
+    Jalankan perintah ini di server untuk membuat kunci enkripsi dan struktur database:
+    ```bash
+    php artisan key:generate
+    php artisan migrate --force --seed
+    ```
+5.  **Build Tampilan (Vite):**
+    Jalankan perintah ini untuk mengunduh modul CSS/JS dan melakukan kompilasi produksi agar website dapat dimuat dengan sangat cepat:
+    ```bash
+    npm install
+    npm run build
+    ```
+6.  **Optimalkan Kecepatan (Cache):**
+    Jalankan perintah cache ini agar server tidak perlu membaca ulang file konfigurasi setiap kali ada pengunjung:
+    ```bash
+    php artisan config:cache
+    php artisan route:cache
+    php artisan view:cache
+    ```
+7.  **Atur Izin Folder:**
+    Beri akses tulis pada folder `storage` dan `bootstrap/cache` agar web server bisa menulis file log/sesi pengunjung:
+    ```bash
+    chown -R www-data:www-data storage bootstrap/cache
+    chmod -R 775 storage bootstrap/cache
+    ```
+8.  **Setting Nginx & SSL:**
+    *   Arahkan domain Anda ke folder `/var/www/simpel-fella/public` (wajib folder `public` agar file sistem tidak bisa diintip orang).
+    *   Pasang SSL gratis pakai Certbot (Let's Encrypt) biar alamat web kita pakai `https://` yang aman dan terpercaya di browser.
+
