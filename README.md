@@ -202,7 +202,7 @@ DB_USERNAME=usrnmedb
 DB_PASSWORD=password
 ```
 
-Pemisahan konfigurasi ini memudahkan pengelolaan aplikasi karena perubahan informasi koneksi database dapat dilakukan melalui file `.env` tanpa perlu mengubah kode program pada `config/database.php`.
+Pemisahan konfigurasi ini memudahkan pengelolaan web karena perubahan informasi koneksi database dapat dilakukan melalui file `.env` tanpa perlu mengubah kode program pada `config/database.php`.
 
 ### 2. Bagaimana Cara Membuat Route Baru di Aplikasi?
 Cara mengarahkan URL yang diketik pengguna di browser agar membuka halaman atau fitur yang pas. Proses pembuatannya:
@@ -251,11 +251,11 @@ Jika ingin menganti database sistem dari PostgreSQL ke MySQL :
     DB_PASSWORD=password
     ```
 2.  **Mengaktifkan Ekstensi PHP MySQL:**
-    Mengekstensi `pdo_mysql` harus sudah terpasang dan aktif di file konfigurasi `php.ini` server/PC Anda.
+    Mengekstensi `pdo_mysql` harus sudah terpasang dan aktif di file konfigurasi `php.ini` server/PC.
 3.  **Membuat Database Baru:**
-    Membuka MySQL client (seperti phpMyAdmin atau TablePlus), lalu membuat database kosong baru dengan nama yang sama seperti nilai `DB_DATABASE` di `.env` tadi (misalnya: `nama_database_mysql`).
+    Membuka MySQL client, lalu membuat database kosong baru dengan nama yang sama seperti nilai `DB_DATABASE` di `.env` tadi (contoh: `nama_database_mysql`).
 4.  **Menjalankan Ulang Migrasi:**
-    Membuka terminal di folder project, lalu menjalankan perintah ini untuk membuat semua tabel baru secara otomatis beserta data contohnya:
+    Membuka terminal di folder project, lalu menjalankan perintah untuk membuat semua tabel baru secara otomatis beserta data contohnya:
     ```bash
     php artisan migrate:fresh --seed
     ```
@@ -264,7 +264,7 @@ Jika ingin menganti database sistem dari PostgreSQL ke MySQL :
 
 ### 5. Cara Deploy Web ke Server Agar Bisa Online
 Supaya web ini bisa diakses lewat internet oleh orang lain, berikut adalah tahapan deployment-nya:
-1.  **Siapkan Server:** Sewa VPS (misalnya pakai OS Ubuntu Server) dan install web server (Nginx/Apache), PHP (versi terbaru >= 8.3 beserta ekstensi database), database server (MySQL/PostgreSQL), Composer, dan Node.js.
+1.  **Menyiapkn Server:** Sewa VPS dan install web server (Nginx/Apache), PHP (versi terbaru beserta ekstensi database), database server (MySQL/PostgreSQL), Composer, dan Node.js.
 2.  **Upload & Install Code:**
     *   Clone project dari repository Git ke server.
     *   Menjalankan perintah `composer install --no-dev --optimize-autoloader` di terminal server agar semua library PHP terinstall dengan versi yang ringan dan cepat khusus untuk produksi.
@@ -300,6 +300,6 @@ Supaya web ini bisa diakses lewat internet oleh orang lain, berikut adalah tahap
     chmod -R 775 storage bootstrap/cache
     ```
 8.  **Setting Nginx & SSL:**
-    *   Mengarahkan domain Anda ke folder `/var/www/simpel-fella/public` (wajib folder `public` agar file sistem tidak bisa diintip orang).
+    *   Mengarahkan domain ke folder `/var/www/simpel-fella/public` (wajib folder `public` agar file sistem tidak bisa diintip orang).
     *   Memasang SSL gratis pakai Certbot (Let's Encrypt) biar alamat website menggunakan https.
 
