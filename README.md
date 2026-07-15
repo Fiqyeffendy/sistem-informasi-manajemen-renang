@@ -3,6 +3,13 @@
 
 SIMPEL-Fella adalah platform manajemen les renang terintegrasi yang menggabungkan **Web Admin (Desktop)** untuk pengelolaan data terpusat dan **Web Mobile Responsif** untuk Pelatih dan Siswa/Orang Tua. Sistem ini dibangun dengan konsep **RESTful API** berbasis Laravel 13 sebagai pusat data (*Single Source of Truth*).
 
+### 👥 Anggota Kelompok
+* **Muchammad Fiqy Effendy** (108)
+* **Ahmad Fathur Rahman** (084)
+* **Adjie Saputra W.** (075)
+* **Rachmat Alfian Akbar** (102)
+* **Aditya Maulana** (077)
+
 ---
 
 ## 🚀 Fitur Utama
