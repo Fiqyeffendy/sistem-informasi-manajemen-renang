@@ -176,7 +176,7 @@ php artisan test
 
 ---
 
-## 📚 Panduan Teknis & Jawaban Evaluasi Sistem
+## 📚 Panduan Teknis & Jawaban 
 
 ### 1. File Konfigurasi Database yang Digunakan
 
@@ -198,43 +198,43 @@ DB_PASSWORD=password
 Pemisahan konfigurasi ini memudahkan pengelolaan aplikasi karena perubahan informasi koneksi database dapat dilakukan melalui file `.env` tanpa perlu mengubah kode program pada `config/database.php`.
 
 ### 2. Bagaimana Cara Membuat Route Baru di Aplikasi?
-Routing adalah cara kita mengarahkan URL yang diketik pengguna di browser agar membuka halaman atau fitur yang pas. Proses pembuatannya:
+Cara mengarahkan URL yang diketik pengguna di browser agar membuka halaman atau fitur yang pas. Proses pembuatannya:
 1.  **Pilih File Rutenya:** 
-    Laravel sudah menyediakan filenya di dalam folder `routes/`. Di aplikasi ini, kita daftarkan lewat [[bootstrap/app.php](file:///d:/simpel-fella/bootstrap/app.php)] yang mengarah ke:
-    *   [[routes/web.php](file:///d:/simpel-fella/routes/web.php)] kalau mau membuat rute halaman biasa (web dashboard).
-    *   [[routes/api.php](file:///d:/simpel-fella/routes/api.php)] kalau mau membuat rute data API (format JSON).
+    Laravel menyediakan filenya di dalam folder `routes/`. Di aplikasi ini, daftarkan lewat [[bootstrap/app.php](file:///d:/simpel-fella/bootstrap/app.php)].
+    *   [[routes/web.php](file:///d:/simpel-fella/routes/web.php)] untuk membuat rute halaman biasa (web dashboard).
+    *   [[routes/api.php](file:///d:/simpel-fella/routes/api.php)] untuk membuat rute data API (format JSON).
 2.  **Tulis Rutenya:**
-    Gunakan fungsi `Route` diikuti metodenya (biasanya `get` untuk menampilkan halaman, atau `post` untuk mengirim data/form).
+    Menggunakan fungsi `Route` diikuti metodenya (`get` untuk menampilkan halaman, atau `post` untuk mengirim data/form).
     *   *Contoh kalau mau buat halaman baru:*
         ```php
         Route::get('/halaman-baru', [NamaController::class, 'namaFungsi'])->name('halaman.baru');
         ```
-    *   *Kita juga bisa langsung ngerender tampilan (view) tanpa controller:*
+    *   *Atau bisa juga langsung ngerender tampilan (view) tanpa controller:*
         ```php
         Route::view('/kontak', 'kontak')->name('kontak');
         ```
 3.  **Kasih Pengaman (Middleware):**
-    Supaya rute itu tidak bisa dibuka sembarangan orang, bungkus rutenya pakai middleware seperti `auth` (harus login dulu) atau `role` (harus punya akses tertentu).
+    Supaya rute tidak bisa dibuka sembarangan orang, route dibungkus pakai middleware seperti `auth` (harus login dulu) atau `role` (harus punya akses tertentu).
 
 ---
 
 ### 3. Bagaimana Sistem Membagi Hak Akses (Role)?
-Aplikasi ini punya 3 tingkat hak akses (role): **Admin**, **Pelatih**, dan **Siswa**. Caranya membatasinya:
-1.  **Di Database:** Tabel `users` punya kolom `role` untuk menyimpan status pengguna (isinya berupa tulisan `admin`, `pelatih`, atau `siswa`).
-2.  **Pintu Gerbang (Middleware):** Kita membuat alat pemeriksa otomatis bernama [[EnsureUserHasRole.php](file:///d:/simpel-fella/app/Http/Middleware/EnsureUserHasRole.php)]. 
+Aplikasi ini punya 3 tingkat hak akses (role): **Admin**, **Pelatih**, dan **Siswa**. Cara membatasinya:
+1.  **Di Database:** Tabel `users` punya kolom `role` untuk menyimpan status pengguna (berupa tulisan `admin`, `pelatih`, atau `siswa`).
+2.  **Pintu Gerbang (Middleware):** Alat pemeriksa otomatis bernama [[EnsureUserHasRole.php](file:///d:/simpel-fella/app/Http/Middleware/EnsureUserHasRole.php)]. 
     *   Tugas alat ini: pas ada user yang mau buka halaman, dia cek dulu *"User ini rolenya apa?"*.
-    *   Kalau rolenya cocok dengan yang diminta halaman tersebut, silakan masuk. Kalau tidak cocok, sistem langsung menolak dan menampilkan error *403 Forbidden* ("Anda tidak memiliki akses").
+    *   Kalau rolenya cocok dengan yang diminta halaman tersebut, dibolehkan masuk. Kalau tidak cocok, sistem langsung menolak dan menampilkan error *403 Forbidden* ("Anda tidak memiliki akses").
 3.  **Pemasangan di Rute:** Alat ini diberi nama panggilan `role` di file [[bootstrap/app.php](file:///d:/simpel-fella/bootstrap/app.php)]. Setelah itu tinggal tempel di [[routes/web.php](file:///d:/simpel-fella/routes/web.php)]:
-    *   `Route::middleware(['role:admin'])` → semua rute di dalamnya cuma bisa dibuka Admin.
-    *   `Route::middleware(['role:pelatih'])` → cuma bisa dibuka Pelatih.
-    *   `Route::middleware(['role:siswa'])` → cuma bisa dibuka Siswa.
+    *   `Route::middleware(['role:admin'])` = semua rute di dalamnya cuma bisa diakses oleh Admin.
+    *   `Route::middleware(['role:pelatih'])` = semua rute di dalamnya cuma bisa diakses oleh Pelatih.
+    *   `Route::middleware(['role:siswa'])` = semua rute di dalamnya cuma bisa diakses oleh Siswa.
 
 ---
 
 ### 4. Langkah-Langkah Mengubah Database dari PostgreSQL ke MySQL
-Jika ingin mengganti database sistem dari PostgreSQL ke MySQL : 
-1.  **Edit File [[.env](file:///d:/simpel-fella/.env)]:**
-    Ubah nilai variabel database dari driver `pgsql` menjadi `mysql` beserta port defaultnya (`3306`):
+Jika ingin menganti database sistem dari PostgreSQL ke MySQL : 
+1.  **Mengedit File [[.env](file:///d:/simpel-fella/.env)]:**
+    Mengubah nilai variabel database dari driver `pgsql` menjadi `mysql` beserta port defaultnya (`3306`):
     ```env
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
@@ -244,55 +244,55 @@ Jika ingin mengganti database sistem dari PostgreSQL ke MySQL :
     DB_PASSWORD=password
     ```
 2.  **Mengaktifkan Ekstensi PHP MySQL:**
-    Ekstensi `pdo_mysql` harus sudah terpasang dan aktif di file konfigurasi `php.ini` server/PC Anda (biasanya diaktifkan lewat kontrol panel XAMPP).
-3.  **Buat Database Baru:**
-    Buka MySQL client (seperti phpMyAdmin atau TablePlus), lalu buat database kosong baru dengan nama yang sama seperti nilai `DB_DATABASE` di `.env` tadi (misalnya: `nama_database_mysql`).
-4.  **Jalankan Ulang Migrasi:**
-    Buka terminal di folder project, lalu jalankan perintah ini untuk membuat semua tabel baru secara otomatis beserta data contohnya:
+    Mengekstensi `pdo_mysql` harus sudah terpasang dan aktif di file konfigurasi `php.ini` server/PC Anda.
+3.  **Membuat Database Baru:**
+    Membuka MySQL client (seperti phpMyAdmin atau TablePlus), lalu membuat database kosong baru dengan nama yang sama seperti nilai `DB_DATABASE` di `.env` tadi (misalnya: `nama_database_mysql`).
+4.  **Menjalankan Ulang Migrasi:**
+    Membuka terminal di folder project, lalu menjalankan perintah ini untuk membuat semua tabel baru secara otomatis beserta data contohnya:
     ```bash
     php artisan migrate:fresh --seed
     ```
 
 ---
 
-### 5. Cara Deploy Aplikasi ke Server Agar Bisa Online
-Supaya aplikasi ini bisa diakses lewat internet oleh orang lain, berikut adalah tahapan deployment-nya:
+### 5. Cara Deploy Web ke Server Agar Bisa Online
+Supaya web ini bisa diakses lewat internet oleh orang lain, berikut adalah tahapan deployment-nya:
 1.  **Siapkan Server:** Sewa VPS (misalnya pakai OS Ubuntu Server) dan install web server (Nginx/Apache), PHP (versi terbaru >= 8.3 beserta ekstensi database), database server (MySQL/PostgreSQL), Composer, dan Node.js.
 2.  **Upload & Install Code:**
     *   Clone project dari repository Git ke server.
     *   Menjalankan perintah `composer install --no-dev --optimize-autoloader` di terminal server agar semua library PHP terinstall dengan versi yang ringan dan cepat khusus untuk produksi.
 3.  **Setup `.env` Produksi:**
-    Buat file `.env` di server :
-    *   Ganti `APP_ENV=production`.
-    *   Ganti `APP_DEBUG=false` 
-    *   Isi domain website Anda di `APP_URL`.
-    *   Masukkan password database server asli.
+    Membuat file `.env` di server :
+    *   Mengganti `APP_ENV=production`.
+    *   Mengganti `APP_DEBUG=false` 
+    *   Mengisi domain website Anda di `APP_URL`.
+    *   Memasukkan password database server asli.
 4.  **Siapkan Database & Kunci Pengaman:**
-    Jalankan perintah di server untuk membuat kunci enkripsi dan struktur database:
+    Menjalankan perintah di server untuk membuat kunci enkripsi dan struktur database:
     ```bash
     php artisan key:generate
     php artisan migrate --force --seed
     ```
 5.  **Build Tampilan (Vite):**
-    Jalankan perintah untuk mengunduh modul CSS/JS dan melakukan kompilasi produksi agar website dapat dimuat dengan sangat cepat:
+    Menjalankan perintah untuk mengunduh modul CSS/JS dan melakukan kompilasi produksi agar website dapat dimuat dengan cepat:
     ```bash
     npm install
     npm run build
     ```
 6.  **Optimalkan Kecepatan (Cache):**
-    Jalankan perintah cache agar server tidak perlu membaca ulang file konfigurasi setiap kali ada pengunjung:
+    Menjalankan perintah cache agar server tidak perlu membaca ulang file konfigurasi setiap kali ada pengunjung:
     ```bash
     php artisan config:cache
     php artisan route:cache
     php artisan view:cache
     ```
 7.  **Atur Izin Folder:**
-    Beri akses tulis pada folder `storage` dan `bootstrap/cache` agar web server bisa menulis file log/sesi pengunjung:
+    Memberikan akses tulis pada folder `storage` dan `bootstrap/cache` agar web server bisa menulis file log/sesi pengunjung:
     ```bash
     chown -R www-data:www-data storage bootstrap/cache
     chmod -R 775 storage bootstrap/cache
     ```
 8.  **Setting Nginx & SSL:**
-    *   Arahkan domain Anda ke folder `/var/www/simpel-fella/public` (wajib folder `public` agar file sistem tidak bisa diintip orang).
-    *   Pasang SSL gratis pakai Certbot (Let's Encrypt) biar alamat web kita pakai `https://` yang aman dan terpercaya di browser.
+    *   Mengarahkan domain Anda ke folder `/var/www/simpel-fella/public` (wajib folder `public` agar file sistem tidak bisa diintip orang).
+    *   Memasang SSL gratis pakai Certbot (Let's Encrypt) biar alamat website menggunakan https.
 
